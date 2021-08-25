@@ -14,14 +14,15 @@
 #include "Platform/Platform.h"
 #include "Resources.h"
 
-#ifdef TC_LINUX
+#ifdef TC_WINDOWS
+#include "Main/resource.h"
+#else
+#ifdef TC_MACOSX
+#include "Application.h"
+#endif
 #include "Platform/File.h"
 #include "Platform/StringConverter.h"
 #include <stdio.h>
-#endif
-
-#ifdef TC_WINDOWS
-#include "Main/resource.h"
 #endif
 
 namespace VeraCrypt
@@ -54,18 +55,24 @@ namespace VeraCrypt
 		strBuf.Zero();
 		strBuf.CopyFrom (res);
 		return string (reinterpret_cast <char *> (strBuf.Ptr()));
-#elif TC_LINUX
+#else
 		// get language from env LANG
 		// support:  C,POSIX,
 		// support for e.g. german: de_DE.UTF-8, de.UTF8, de_DE, de
 		// not support e.g.: de@Euro
 		string defaultLang("en");
+#if defined (TC_MACOSX)
+		string filenamePrefix = StringConverter::ToSingle (Application::GetExecutableDirectory()) + "/../Resources/languages/Language.";
+#else
 		string filenamePrefix("/usr/share/veracrypt/languages/Language.");
+#endif
 		string filenamePost(".xml");
 		string filename = filenamePrefix + defaultLang + filenamePost;
 		if(const char* env_p = getenv("LANG")){
 		    string lang(env_p);
+#ifdef DEBUG
 			std::cout << lang << std::endl;
+#endif
 			if ( lang.size() > 1 ){
 				int found = lang.find(".");
 				if ( found > 1 ){
@@ -120,14 +127,6 @@ namespace VeraCrypt
 			string langxml(keyfileData.begin(), keyfileData.end());
 			return langxml;
 		}
-		static byte LanguageXml[] =
-		{
-#			include "Common/Language.xml.h"
-			, 0
-		};
-
-		return string ((const char*) LanguageXml);
-#else
 		static byte LanguageXml[] =
 		{
 #			include "Common/Language.xml.h"

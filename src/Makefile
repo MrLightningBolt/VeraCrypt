@@ -95,6 +95,15 @@ ifeq "$(origin WXSTATIC)" "command line"
 	endif
 endif
 
+ifeq "$(origin INDICATOR)" "command line"
+	ifneq (,$(findstring gtk3,$(shell $(WX_CONFIG) --selected-config)))
+		INDICATOR_LIBRARY=ayatana-appindicator3-0.1
+	else
+		INDICATOR_LIBRARY=ayatana-appindicator-0.1
+	endif
+	export LIBS += $(shell pkg-config --libs $(INDICATOR_LIBRARY))
+	C_CXX_FLAGS += $(shell pkg-config --cflags $(INDICATOR_LIBRARY)) -DHAVE_INDICATORS
+endif
 
 #------ Release configuration ------
 
@@ -174,6 +183,15 @@ ifeq "$(shell uname -s)" "Linux"
 
 	PLATFORM := Linux
 	C_CXX_FLAGS += -DTC_UNIX -DTC_LINUX
+
+	# GNU GCC version 11 and higher compile with -std=gnu++17 by default
+        # which breaks "byte" definitions in Crypto++ library. So set 
+        # -std=gnu++14 instead.
+        GCC11PLUS := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 11)
+        ifeq "$(GCC11PLUS)" "1"
+                CXXFLAGS += -std=gnu++14
+        endif
+
 	
 	ifeq "$(SIMD_SUPPORTED)" "1"
 		CFLAGS += -msse2
@@ -265,6 +283,10 @@ ifeq "$(shell uname -s)" "Darwin"
 	ifeq "$(CPU_ARCH)" "x64"
 		CPU_ARCH = x86
 	endif
+	
+	ifeq "$(CPU_ARCH)" "arm64"
+		CPU_ARCH = x86
+	endif
 
 	CFLAGS += -msse2
 	CXXFLAGS += -msse2
@@ -293,14 +315,18 @@ ifeq "$(shell uname -s)" "Darwin"
 		C_CXX_FLAGS += -gfull -arch x86_64
 		LFLAGS += -Wl,-dead_strip -arch x86_64
 		
+		WX_CONFIGURE_FLAGS += --without-libpng --disable-gif --disable-pcx --disable-tga --disable-iff --disable-gif --disable-svg
+
 		#----- Legacy build: we build both 32-bit and 64-bit ----
 		ifdef VC_LEGACY_BUILD
 			C_CXX_FLAGS += -arch i386
 			LFLAGS += -arch i386
 			WX_CONFIGURE_FLAGS += --enable-universal_binary=i386,x86_64
 		else
-			CXXFLAGS += -std=c++11
-			WX_CONFIGURE_FLAGS += --disable-universal_binary
+			CXXFLAGS += -std=c++11			
+			C_CXX_FLAGS += -arch arm64
+			LFLAGS += -arch arm64
+			WX_CONFIGURE_FLAGS += --enable-universal_binary=arm64,x86_64
 		endif
 
 		WXCONFIG_CFLAGS += -gfull
@@ -360,6 +386,27 @@ ifeq "$(shell uname -s)" "FreeBSD"
 		WXCONFIG_CXXFLAGS += -mno-sse2
 	endif
 
+endif
+
+
+#------ OpenBSD configuration ------
+
+ifeq "$(shell uname -s)" "OpenBSD"
+
+	PLATFORM := OpenBSD
+	PLATFORM_UNSUPPORTED := 1
+	C_CXX_FLAGS += -DTC_UNIX -DTC_BSD -DTC_OPENBSD
+
+	CC := cc
+	CXX := c++
+
+	ifeq "$(TC_BUILD_CONFIG)" "Release"
+		C_CXX_FLAGS += -fdata-sections -ffunction-sections -fpie
+		LFLAGS += -Wl,--gc-sections -pie
+
+		WXCONFIG_CFLAGS += -fpie -fPIC
+		WXCONFIG_CXXFLAGS += -fpie -fPIC
+	endif
 endif
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VeraCrypt>
-  <localization prog-version= "1.24-Update9">
+  <localization prog-version= "1.24-Update9-Beta-21-08-15">
     <language langid="bg" name="Български" en-name="Bulgarian" version="0.1.0" translators="Lachezar Gorchev" />
     <font lang="bg" class="normal" size="11" face="default" />
     <font lang="bg" class="bold" size="13" face="Arial" />
@@ -1471,7 +1471,6 @@
     <entry lang="en" key="LINUX_CROSS_SUPPORT_OTHER">I will mount the volume on other platforms</entry>
     <entry lang="en" key="LINUX_CROSS_SUPPORT_OTHER_HELP">Choose this option if you need to use the volume on other platforms.</entry>
     <entry lang="en" key="LINUX_CROSS_SUPPORT_ONLY">I will mount the volume only on {0}</entry>
-    <entry lang="en" key="LINUX_CROSS_SUPPORT_ONLY_HELP">Choose this option if you do not need to use the volume on other platforms.</entry>
     <entry lang="en" key="LINUX_CROSS_SUPPORT_ONLY_HELP">Choose this option if you do not need to use the volume on other platforms.</entry>
     <entry lang="en" key="LINUX_DESELECT">Deselect</entry>
     <entry lang="en" key="LINUX_ADMIN_PW_QUERY">Enter your user password or administrator password:</entry>
