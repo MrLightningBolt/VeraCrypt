@@ -11,8 +11,8 @@ elseif ( NOT DEFINED NOGUI )
 endif()
 
 # - Set version of the package
-set( FULL_VERSION 		"1.24-Update9" )
-set( VERSION 			"1.24.25" )
+set( FULL_VERSION 		"1.26.0" )
+set( VERSION 			"1.26.0" )
 set( RELEASE 			"1" )
 
 # - Set PROJECT_NAME and CONFLICT_PACKAGE values
@@ -254,7 +254,7 @@ if ( ( PLATFORM STREQUAL "Debian" ) OR ( PLATFORM STREQUAL "Ubuntu" ) )
 		if ( ( ( PLATFORM STREQUAL "Debian" ) AND ( PLATFORM_VERSION VERSION_GREATER_EQUAL "10" ) ) 
 			OR ( ( PLATFORM STREQUAL "Ubuntu" ) AND ( PLATFORM_VERSION VERSION_GREATER_EQUAL "18.04" ) ) )
 			
-			set( CPACK_DEBIAN_PACKAGE_DEPENDS 		"libwxgtk3.0-gtk3-0v5, libfuse2, dmsetup, sudo" )										
+			set( CPACK_DEBIAN_PACKAGE_DEPENDS 		"libwxgtk3.0-gtk3-0v5, libayatana-appindicator3-1, libfuse2, dmsetup, sudo" )										
 			
 		else ()
 			# Link against statically built wxWidgets on Ubuntu 14.04 and older, and Debian 8 and older
@@ -324,6 +324,8 @@ elseif ( ( PLATFORM STREQUAL "CentOS" ) OR ( PLATFORM STREQUAL "openSUSE" ) )
 	list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION	"/usr/share" )
 	list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION	"/usr/share/applications" )
 	list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION	"/usr/share/doc" )
+	list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION	"/usr/share/mime" )
+	list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION	"/usr/share/mime/packages" )
 	list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION	"/usr/share/pixmaps" )
 	
 	set( CPACK_RPM_PACKAGE_RELOCATABLE 					"OFF" )

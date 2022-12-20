@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VeraCrypt>
-  <localization prog-version= "1.24-Update9-Beta-21-08-15">
+  <localization prog-version= "1.26">
     <language langid="ka" name="ქართული" en-name="Georgian" version="0.1.0" translators="Kakha Lomiashvili" />
     <font lang="ka" class="normal" size="12" face="Arial" />
     <font lang="ka" class="bold" size="12" face="Arial" />
@@ -955,7 +955,7 @@
     <entry lang="en" key="HEADER_RESTORE_INTERNAL">Restore the volume header from the backup embedded in the volume</entry>
     <entry lang="en" key="HEADER_RESTORE_EXTERNAL">Restore the volume header from an external backup file</entry>
     <entry lang="en" key="HEADER_BACKUP_SIZE_INCORRECT">The size of the volume header backup file is incorrect.</entry>
-    <entry lang="en" key="VOLUME_HAS_NO_BACKUP_HEADER">There is no backup header embedded in this volume (note that only volumes created by VeraCrypt 6.0 or later contain embedded backup headers).</entry>
+    <entry lang="en" key="VOLUME_HAS_NO_BACKUP_HEADER">There is no backup header embedded in this volume (note that only volumes created by TrueCrypt 6.0 or later contain embedded backup headers).</entry>
     <entry lang="ka" key="BACKUP_HEADER_NOT_FOR_SYS_DEVICE">თქვენ ცდილობთ სისტემური განაყოფის/მოწყობილობის სათაურის რეზერვირებას. ეს არ არის ნებადართული. სისტემური დისკის რეზევირება/აღდგენის ოპერაციები შიძლება განხორციელდეს მხოლოდ VeraCrypt-ის აღმდგენი დისკის გამოყენებით.\n\nგსურთ VeraCrypt-ის აღმდგენი დისკის შექმნა?</entry>
     <entry lang="ka" key="RESTORE_HEADER_NOT_FOR_SYS_DEVICE">თქვენ ცდილობთ VeraCrypt-ის ვირტუალური ტომის სათაურის აღდგენას, მაგრამ არჩეულია სისტემური განაყოფი/მოწყობილობა. ეს არ არის ნებადართული. სისტემური დისკის რეზევირება/აღდგენის ოპერაციები შიძლება განხორციელდეს მხოლოდ VeraCrypt-ის აღმდგენი დისკის გამოყენებით.\n\nგსურთ VeraCrypt-ის აღმდგენი დისკის შექმნა?</entry>
     <entry lang="ka" key="RESCUE_DISK_NON_WIZARD_CREATION_SELECT_PATH">OK-ის დაწკაპების შემდეგ აირჩიეთ VeraCrypt-ის ახალი აღმდგენი დისკის ISO ფაილის სახელი და მისამართი.</entry>
@@ -1425,7 +1425,7 @@
     <entry lang="en" key="PASSWORD_MAXLENGTH_REACHED">Password already reached its maximum length of %d characters.\nNo additional character is allowed.</entry>
     <entry lang="en" key="IDC_SELECT_LANGUAGE_LABEL">Select the language to use during the installation:</entry>
     <entry lang="en" key="VOLUME_TOO_LARGE_FOR_HOST">ERROR: The size of the file container is larger than the available free space on disk.</entry>
-    <entry lang="en" key="IDC_ALLOW_WINDOWS_DEFRAG">Allow Windows Disk Defragmenter to defragment non-system partition/drive</entry>    
+    <entry lang="en" key="IDC_ALLOW_WINDOWS_DEFRAG">Allow Windows Disk Defragmenter to defragment non-system partition/drive</entry>
     <entry lang="en" key="CONFIRM_ALLOW_WINDOWS_DEFRAG">WARNING: Defragmenting non-system partitions/drives may leak metadata about their content or cause issues with hidden volumes they may contain.\n\nContinue?</entry>
     <entry lang="en" key="VIRTUAL_DEVICE">Virtual Device</entry>
     <entry lang="en" key="MOUNTED_VOLUME_NOT_ASSOCIATED">The selected mounted volume is not associated with its drive letter in Windows and so it can not be opened in Windows Explorer.</entry>
@@ -1565,6 +1565,9 @@
     <entry lang="en" key="UNKNOWN_OPTION">Unknown option</entry>
     <entry lang="en" key="VOLUME_LOCATION">Volume Location</entry>
     <entry lang="en" key="VOLUME_HOST_IN_USE">WARNING: The host file/device {0} is already in use!\n\nIgnoring this can cause undesired results including system instability. All applications that might be using the host file/device should be closed before mounting the volume.\n\nContinue mounting?</entry>
+    <entry lang="en" key="CANT_INSTALL_WITH_EXE_OVER_MSI">VeraCrypt was previously installed using an MSI package and so it can't be updated using the standard installer.\n\nPlease use the MSI package to update your VeraCrypt installation.</entry>
+    <entry lang="en" key="IDC_USE_ALL_FREE_SPACE">Use all available free space</entry>
+	<entry lang="en" key="SYS_ENCRYPTION_UPGRADE_UNSUPPORTED_ALGORITHM">VeraCrypt cannot be upgraded because the system partition/drive was encrypted using an algorithm that is not supported anymore.\nPlease decrypt your system before upgrading VeraCrypt and then encrypt it again.</entry>
   </localization>
   <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="VeraCrypt">

@@ -248,8 +248,8 @@ static TC_THREAD_PROC EncryptionThreadProc (void *threadArg)
 		case DeriveKeyWork:
 			switch (workItem->KeyDerivation.Pkcs5Prf)
 			{
-			case RIPEMD160:
-				derive_key_ripemd160 (workItem->KeyDerivation.Password, workItem->KeyDerivation.PasswordLength, workItem->KeyDerivation.Salt, PKCS5_SALT_SIZE,
+			case BLAKE2S:
+				derive_key_blake2s (workItem->KeyDerivation.Password, workItem->KeyDerivation.PasswordLength, workItem->KeyDerivation.Salt, PKCS5_SALT_SIZE,
 					workItem->KeyDerivation.IterationCount, workItem->KeyDerivation.DerivedKey, GetMaxPkcs5OutSize());
 				break;
 
@@ -692,7 +692,7 @@ void EncryptionThreadPoolDoWork (EncryptionThreadPoolWorkType type, byte *data, 
 		workItem->Encryption.UnitCount = unitsPerFragment;
 		workItem->Encryption.StartUnitNo.Value = fragmentStartUnitNo;
 
-		fragmentData += unitsPerFragment * ENCRYPTION_DATA_UNIT_SIZE;
+		fragmentData += ((uint64)unitsPerFragment) * ENCRYPTION_DATA_UNIT_SIZE;
 		fragmentStartUnitNo += unitsPerFragment;
 
 		if (remainder > 0 && --remainder == 0)

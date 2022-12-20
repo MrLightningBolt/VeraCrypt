@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <VeraCrypt xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <localization prog-version="1.24-Update7">
+  <localization prog-version="1.26">
     <language langid="he" name="עברית" en-name="Hebrew" version="0.1.0" translators="thewh1teagle" />
     <font lang="he" class="normal" size="11" face="default" />
     <font lang="he" class="bold" size="13" face="Arial" />
@@ -954,7 +955,7 @@
     <entry lang="he" key="HEADER_RESTORE_INTERNAL">שחזר את כותרת אמצעי האחסון מהגיבוי המוטמע באמצעי אחסון</entry>
     <entry lang="he" key="HEADER_RESTORE_EXTERNAL">שחזר את כותרת אמצעי האחסון מקובץ גיבוי חיצוני</entry>
     <entry lang="he" key="HEADER_BACKUP_SIZE_INCORRECT">הגודל של קובץ הגיבוי של כותרת אמצעי האחסון אינו נכון.</entry>
-    <entry lang="he" key="VOLUME_HAS_NO_BACKUP_HEADER">אין כותרת גיבוי משובצת באמצעי אחסון זה (שים לב שרק אמצעי אחסון שנוצרו על ידי VeraCrypt 6.0 ואילך מכילים כותרות גיבוי מוטבעות).</entry>
+    <entry lang="he" key="VOLUME_HAS_NO_BACKUP_HEADER">אין כותרת גיבוי משובצת באמצעי אחסון זה (שים לב שרק אמצעי אחסון שנוצרו על ידי TrueCrypt 6.0 ואילך מכילים כותרות גיבוי מוטבעות).</entry>
     <entry lang="he" key="BACKUP_HEADER_NOT_FOR_SYS_DEVICE">אתה מנסה לגבות את הכותרת של מחיצת המערכת / כונן המערכת.זה לא מותר.ניתן לבצע פעולות גיבוי / שחזור הנוגעות למחיצת המערכת / כונן המערכת באמצעות דיסק ההצלה של VeraCrypt. \n \n האם ברצונך ליצור דיסק הצלה של VeraCrypt?</entry>
     <entry lang="he" key="RESTORE_HEADER_NOT_FOR_SYS_DEVICE">אתה מנסה לשחזר את הכותרת של אמצעי אחסון וירטואלי של VeraCrypt, אך בחרת במחיצת המערכת / בכונן.זה לא מותר.ניתן לבצע פעולות גיבוי / שחזור הנוגעות למחיצת המערכת / כונן המערכת באמצעות דיסק ההצלה של VeraCrypt. \n \n האם ברצונך ליצור דיסק הצלה של VeraCrypt?</entry>
     <entry lang="he" key="RESCUE_DISK_NON_WIZARD_CREATION_SELECT_PATH">לאחר שתלחץ על אישור, תבחר שם קובץ לתמונת דיסק ההצלה החדשה של VeraCrypt ולמיקום שבו ברצונך למקם אותה.</entry>
@@ -1424,7 +1425,7 @@
     <entry lang="he" key="PASSWORD_MAXLENGTH_REACHED">הסיסמה כבר הגיעה לאורכה המרבי של%d תווים. \n אין תו נוסף מותר.</entry>
     <entry lang="he" key="IDC_SELECT_LANGUAGE_LABEL">בחר את השפה לשימוש במהלך ההתקנה:</entry>
     <entry lang="he" key="VOLUME_TOO_LARGE_FOR_HOST">שגיאה: גודלו של מיכל הקבצים גדול מהשטח הפנוי הזמין בדיסק.</entry>
-    <entry lang="he" key="IDC_ALLOW_WINDOWS_DEFRAG">אפשר למאחה הדיסקים של Windows לאחות את המחיצה / הכונן שאינם ממערכת</entry>    
+    <entry lang="he" key="IDC_ALLOW_WINDOWS_DEFRAG">אפשר למאחה הדיסקים של Windows לאחות את המחיצה / הכונן שאינם ממערכת</entry>
     <entry lang="he" key="CONFIRM_ALLOW_WINDOWS_DEFRAG">אזהרה: איחוי מחיצות / כוננים שאינם ממערכת עלול לדלוף מטא-נתונים לגבי התוכן שלהם או לגרום לבעיות באמצעי אחסוןים נסתרים שהם עשויים להכיל. \n \n להמשיך?</entry>
     <entry lang="he" key="VIRTUAL_DEVICE">התקן וירטואלי</entry>
     <entry lang="he" key="MOUNTED_VOLUME_NOT_ASSOCIATED">אמצעי האחסון המותקן שנבחר אינו משויך לאות הכונן שלו ב- Windows ולכן לא ניתן לפתוח אותו בסייר Windows.</entry>
@@ -1565,6 +1566,9 @@
     <entry lang="he" key="UNKNOWN_OPTION">אפשרות לא ידועה</entry>
     <entry lang="he" key="VOLUME_LOCATION">מיקום אמצעי אחסון</entry>
     <entry lang="he" key="VOLUME_HOST_IN_USE">אזהרה: הקובץ / ההתקן המארח {0} כבר נמצא בשימוש! \n \n התעלמות מכך עלולה לגרום לתוצאות לא רצויות כולל חוסר יציבות במערכת.יש לסגור את כל היישומים שעשויים להשתמש בקובץ המארח / בהתקן לפני התקנת אמצעי האחסון. \n \n האם להמשיך בטעינה?</entry>
+    <entry lang="en" key="CANT_INSTALL_WITH_EXE_OVER_MSI">VeraCrypt was previously installed using an MSI package and so it can't be updated using the standard installer.\n\nPlease use the MSI package to update your VeraCrypt installation.</entry>
+    <entry lang="en" key="IDC_USE_ALL_FREE_SPACE">Use all available free space</entry>
+	<entry lang="en" key="SYS_ENCRYPTION_UPGRADE_UNSUPPORTED_ALGORITHM">VeraCrypt cannot be upgraded because the system partition/drive was encrypted using an algorithm that is not supported anymore.\nPlease decrypt your system before upgrading VeraCrypt and then encrypt it again.</entry>
   </localization>
   <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified">
     <xs:element name="VeraCrypt">

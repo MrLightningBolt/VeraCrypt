@@ -84,6 +84,8 @@ BOOL bDesktopIconStatusDetermined = FALSE;
 
 HMODULE volatile SystemRestoreDll = 0;
 
+extern HMODULE hcrypt32dll;
+
 void localcleanup (void)
 {
 	localcleanupwiz ();
@@ -738,6 +740,24 @@ void DetermineUpgradeDowngradeStatus (BOOL bCloseDriverHandle, LONG *driverVersi
 	*driverVersionPtr = driverVersion;
 }
 
+BOOL isMsiInstalled ()
+{
+	BOOL bRet = FALSE;
+	HKEY hKey;
+	if (ERROR_SUCCESS == RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\VeraCrypt_MSI", 0, KEY_READ | KEY_WOW64_64KEY, &hKey))
+	{
+		DWORD dwType = 0;
+		if (	(ERROR_SUCCESS == RegQueryValueExW(hKey, L"ProductGuid", NULL, &dwType, NULL, NULL))
+			&&	(REG_SZ == dwType))
+		{
+			bRet = TRUE;
+		}
+		RegCloseKey(hKey);
+	}
+
+	return bRet;
+}
+
 
 static BOOL IsFileInUse (const wstring &filePath)
 {
@@ -767,7 +787,7 @@ BOOL DoFilesInstall (HWND hwndDlg, wchar_t *szDestDir)
 
 		GetModuleFileName (NULL, szTmp, ARRAYSIZE (szTmp));
 
-		if (!SelfExtractInMemory (szTmp))
+		if (!SelfExtractInMemory (szTmp, FALSE))
 			return FALSE;
 	}
 
@@ -799,7 +819,8 @@ BOOL DoFilesInstall (HWND hwndDlg, wchar_t *szDestDir)
 			if (Is64BitOs ())
 				driver64 = TRUE;
 
-			GetSystemDirectory (szDir, ARRAYSIZE (szDir));
+			if (!GetSystemDirectory (szDir, ARRAYSIZE (szDir)))
+				StringCbCopyW(szDir, sizeof(szDir), L"C:\\Windows\\System32");
 
 			x = wcslen (szDir);
 			if (szDir[x - 1] != L'\\')
@@ -1706,6 +1727,10 @@ BOOL DoDriverUnload (HWND hwndDlg)
 					if (CurrentOSMajor == 6 && CurrentOSMinor == 0 && CurrentOSServicePack < 1)
 						AbortProcess ("SYS_ENCRYPTION_UPGRADE_UNSUPPORTED_ON_VISTA_SP0");
 
+					// check if we are upgrading a system encrypted with unsupported algorithms
+					if (bootEnc.IsUsingUnsupportedAlgorithm(driverVersion))
+						AbortProcess ("SYS_ENCRYPTION_UPGRADE_UNSUPPORTED_ALGORITHM");
+
 					SystemEncryptionUpdate = TRUE;
 					PortableMode = FALSE;
 				}
@@ -2224,6 +2249,14 @@ void DoInstall (void *arg)
 
 	ClearLogWindow (hwndDlg);
 
+	if (isMsiInstalled())
+	{
+		MessageBoxW (hwndDlg,  GetString ("CANT_INSTALL_WITH_EXE_OVER_MSI"), lpszTitle, MB_ICONHAND);
+		Error ("INSTALL_FAILED", hwndDlg);
+		PostMessage (MainDlg, TC_APPMSG_INSTALL_FAILURE, 0, 0);
+		return;
+	}
+
 	if (mkfulldir (InstallationPath, TRUE) != 0)
 	{
 		if (mkfulldir (InstallationPath, FALSE) != 0)
@@ -2252,12 +2285,15 @@ void DoInstall (void *arg)
 		&& (IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L".exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L"-x86.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L"-x64.exe")
+			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L"-arm64.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L" Format.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L" Format-x86.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L" Format-x64.exe")
+			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L" Format-arm64.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L"Expander.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L"Expander-x86.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L"Expander-x64.exe")
+			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L"Expander-arm64.exe")
 			|| IsFileInUse (wstring (InstallationPath) + L'\\' + _T(TC_APP_NAME) L" Setup.exe")
 			)
 		)
@@ -2687,31 +2723,6 @@ int WINAPI wWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, wchar_t *lpsz
 
 	SelfExtractStartupInit();
 
-#ifdef PORTABLE
-	lpszTitle = L"VeraCrypt Portable";
-#else
-	lpszTitle = L"VeraCrypt Setup";
-#endif
-	/* Call InitApp to initialize the common code */
-	InitApp (hInstance, NULL);
-
-#ifndef PORTABLE
-	if (IsAdmin () != TRUE)
-		if (MessageBoxW (NULL, GetString ("SETUP_ADMIN"), lpszTitle, MB_YESNO | MB_ICONQUESTION) != IDYES)
-		{
-			FinalizeApp ();
-			exit (1);
-		}
-#endif
-	/* Setup directory */
-	{
-		wchar_t *s;
-		GetModuleFileName (NULL, SetupFilesDir, ARRAYSIZE (SetupFilesDir));
-		s = wcsrchr (SetupFilesDir, L'\\');
-		if (s)
-			s[1] = 0;
-	}
-
 	/* Parse command line arguments */
 
 	if (lpszCommandLine[0] == L'/')
@@ -2744,11 +2755,36 @@ int WINAPI wWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, wchar_t *lpsz
 		}
 	}
 
+#ifdef PORTABLE
+	lpszTitle = L"VeraCrypt Portable";
+#else
+	lpszTitle = L"VeraCrypt Setup";
+#endif
+	/* Call InitApp to initialize the common code */
+	InitApp (hInstance, NULL);
+
+#ifndef PORTABLE
+	if (IsAdmin () != TRUE)
+		if (MessageBoxW (NULL, GetString ("SETUP_ADMIN"), lpszTitle, MB_YESNO | MB_ICONQUESTION) != IDYES)
+		{
+			FinalizeApp ();
+			exit (1);
+		}
+#endif
+	/* Setup directory */
+	{
+		wchar_t *s;
+		GetModuleFileName (NULL, SetupFilesDir, ARRAYSIZE (SetupFilesDir));
+		s = wcsrchr (SetupFilesDir, L'\\');
+		if (s)
+			s[1] = 0;
+	}
+
 	if (bMakePackage)
 	{
 		/* Create self-extracting package */
 
-		MakeSelfExtractingPackage (NULL, SetupFilesDir);
+		MakeSelfExtractingPackage (NULL, SetupFilesDir, FALSE);
 	}
 	else
 	{

@@ -143,6 +143,10 @@ export PLATFORM_UNSUPPORTED := 0
 
 export CPU_ARCH ?= unknown
 export SIMD_SUPPORTED := 0
+export DISABLE_AESNI ?= 0
+
+export GCC_GTEQ_440 := 0
+export GCC_GTEQ_430 := 0
 
 ARCH ?= $(shell uname -m)
 
@@ -176,6 +180,9 @@ ifeq "$(origin NOSSE2)" "command line"
 	SIMD_SUPPORTED := 0
 endif
 
+ifeq "$(origin NOAESNI)" "command line"
+	DISABLE_AESNI := 1
+endif
 
 #------ Linux configuration ------
 
@@ -199,9 +206,15 @@ ifeq "$(shell uname -s)" "Linux"
 
 		GCC_GTEQ_440 := $(shell expr `$(CC) -dumpversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/' -e 's/^[0-9]\{1,2\}$$/&0000/'` \>= 40400)
 		GCC_GTEQ_430 := $(shell expr `$(CC) -dumpversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/' -e 's/^[0-9]\{1,2\}$$/&0000/'` \>= 40300)
-		ifeq "$(GCC_GTEQ_440)" "1"
-			CFLAGS += -maes
-			CXXFLAGS += -maes
+
+		ifeq "$(DISABLE_AESNI)" "1"
+			CFLAGS += -mno-aes -DCRYPTOPP_DISABLE_AESNI
+			CXXFLAGS += -mno-aes -DCRYPTOPP_DISABLE_AESNI
+		else
+			ifeq "$(GCC_GTEQ_440)" "1"
+				CFLAGS += -maes
+				CXXFLAGS += -maes
+			endif
 		endif
 
 		ifeq "$(GCC_GTEQ_430)" "1"
@@ -263,7 +276,7 @@ ifeq "$(shell uname -s)" "Darwin"
 	export VC_OSX_SDK ?= $(VC_OSX_TARGET)
 
 	#check to see if XCode 3 path exists.Otherwise, use XCode 4 path
-	VC_OSX_SDK_PATH  := /Developer/SDKs/MacOSX$(VC_OSX_SDK).sdk
+	VC_OSX_SDK_PATH := /Developer/SDKs/MacOSX$(VC_OSX_SDK).sdk
 	ifeq ($(wildcard $(VC_OSX_SDK_PATH)/SDKSettings.plist),)
 		VC_OSX_SDK_PATH := /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(VC_OSX_SDK).sdk
 	endif
@@ -365,8 +378,16 @@ ifeq "$(shell uname -s)" "FreeBSD"
 	endif
 
 	ifeq "$(SIMD_SUPPORTED)" "1"
-		CFLAGS += -msse2 -maes
-		CXXFLAGS += -msse2 -maes
+		CFLAGS += -msse2
+		CXXFLAGS += -msse2
+		
+		ifeq "$(DISABLE_AESNI)" "1"
+			CFLAGS += -mno-aes -DCRYPTOPP_DISABLE_AESNI
+			CXXFLAGS += -mno-aes -DCRYPTOPP_DISABLE_AESNI
+		else
+			CFLAGS += -maes
+			CXXFLAGS += -maes
+		endif
 
 		ifeq "$(origin SSSE3)" "command line"
 			CFLAGS += -mssse3
@@ -436,8 +457,8 @@ WX_CONFIGURE_FLAGS += --disable-protocol --disable-protocols --disable-url --dis
 	--disable-xrc --disable-aui --disable-postscript --disable-printarch \
 	--disable-arcstream --disable-fs_archive --disable-fs_zip --disable-tarstream --disable-zipstream \
 	--disable-animatectrl --disable-bmpcombobox --disable-calendar --disable-caret --disable-checklst --disable-collpane --disable-colourpicker --disable-comboctrl \
-	--disable-datepick --disable-display --disable-dirpicker --disable-filepicker --disable-fontpicker --disable-grid  --disable-dataviewctrl \
-	--disable-listbook --disable-odcombobox --disable-sash  --disable-searchctrl --disable-slider --disable-splitter --disable-togglebtn \
+	--disable-datepick --disable-display --disable-dirpicker --disable-filepicker --disable-fontpicker --disable-grid --disable-dataviewctrl \
+	--disable-listbook --disable-odcombobox --disable-sash --disable-searchctrl --disable-slider --disable-splitter --disable-togglebtn \
 	--disable-toolbar --disable-tbarnative --disable-treebook --disable-toolbook --disable-tipwindow --disable-popupwin \
 	--disable-commondlg --disable-aboutdlg --disable-coldlg --disable-finddlg --disable-fontdlg --disable-numberdlg --disable-splash \
 	--disable-tipdlg --disable-progressdlg --disable-wizarddlg --disable-miniframe --disable-splines --disable-palette \

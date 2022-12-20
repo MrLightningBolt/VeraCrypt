@@ -1360,7 +1360,10 @@ BOOL StartStopService_Dll (MSIHANDLE hInstaller, wchar_t *lpszService, BOOL bSta
 	if (bStart)
 	{
 		if (!StartService (hService, argc, argv) && (GetLastError () != ERROR_SERVICE_ALREADY_RUNNING))
+		{
+			MSILog(hInstaller, MSI_ERROR_LEVEL, L"Failed to start %s. Error 0x%.8X", lpszService, GetLastError ());
 			goto error;
+		}
 	}
 	else
 		ControlService (hService, SERVICE_CONTROL_STOP, &status);
@@ -1379,10 +1382,16 @@ BOOL StartStopService_Dll (MSIHANDLE hInstaller, wchar_t *lpszService, BOOL bSta
 
 	bRet = QueryServiceStatus (hService, &status);
 	if (bRet != TRUE)
+	{
+		MSILog(hInstaller, MSI_ERROR_LEVEL, L"Failed to query status of %s. Error 0x%.8X", lpszService, GetLastError ());
 		goto error;
+	}
 
 	if (status.dwCurrentState != dwExpectedState)
+	{
+		MSILog(hInstaller, MSI_ERROR_LEVEL, L"Current state of %s (0x%.8X) is different from expected one (0x%.8X).", lpszService, status.dwCurrentState, dwExpectedState);
 		goto error;
+	}
 
 	bOK = TRUE;
 
@@ -1551,6 +1560,14 @@ BOOL DoDriverUnload_Dll (MSIHANDLE hInstaller, HWND hwnd)
 						goto end;
 					}
 
+					// check if we are upgrading a system encrypted with unsupported algorithms
+					if (bootEnc.IsUsingUnsupportedAlgorithm(driverVersion))
+					{
+						MSILogAndShow(hInstaller, MSI_ERROR_LEVEL, GetString("SYS_ENCRYPTION_UPGRADE_UNSUPPORTED_ALGORITHM"));
+						bOK = FALSE;
+						goto end;
+					}
+
 					SystemEncryptionUpdate = TRUE;
 					PortableMode = FALSE;
 				}
@@ -1606,6 +1623,12 @@ BOOL DoDriverUnload_Dll (MSIHANDLE hInstaller, HWND hwnd)
 
 			if (TCWindowClosed)
 				Sleep (2000);
+
+			// stop service
+			if (SystemEncryptionUpdate)
+			{
+				StartStopService_Dll (hInstaller, TC_SYSTEM_FAVORITES_SERVICE_NAME, FALSE, 0, NULL);
+			}
 		}
 
 		// Test for any applications attached to driver
@@ -1891,13 +1914,27 @@ BOOL UpgradeBootLoader_Dll (MSIHANDLE hInstaller, HWND hwndDlg)
 {
 	MSILog(hInstaller, MSI_INFO_LEVEL, L"Begin UpgradeBootLoader_Dll");
 
-	BOOL bOK = FALSE;
+	BOOL bOK = FALSE, bNeedUnloadDriver = FALSE;
+	int status;
 
 	if (!SystemEncryptionUpdate)
 	{
 		MSILog(hInstaller, MSI_INFO_LEVEL, L"SystemEncryptionUpdate == FALSE");
 		bOK = TRUE;
 		goto end;
+	}
+
+	if (hDriver == INVALID_HANDLE_VALUE)
+	{
+		status = DriverAttach();
+		if ((status == 0) && (hDriver != INVALID_HANDLE_VALUE))
+		{
+			bNeedUnloadDriver = TRUE;
+		}
+		else
+		{
+			MSILog(hInstaller, MSI_INFO_LEVEL, L"UpgradeBootLoader_Dll: failed to attach to driver");
+		}
 	}
 
 	try
@@ -1908,7 +1945,8 @@ BOOL UpgradeBootLoader_Dll (MSIHANDLE hInstaller, HWND hwndDlg)
 		{
 			MSILog (hInstaller, MSI_INFO_LEVEL, GetString("INSTALLER_UPDATING_BOOT_LOADER"));
 
-			bootEnc.InstallBootLoader (true);
+			// this is done by the service now
+			//bootEnc.InstallBootLoader (true);
 
 			if (bootEnc.GetInstalledBootLoaderVersion() <= TC_RESCUE_DISK_UPGRADE_NOTICE_MAX_VERSION)
 			{
@@ -1928,6 +1966,11 @@ BOOL UpgradeBootLoader_Dll (MSIHANDLE hInstaller, HWND hwndDlg)
 	MSILog (hInstaller, MSI_ERROR_LEVEL, GetString("BOOT_LOADER_UPGRADE_FAILED"));
 
 end:
+	if (bNeedUnloadDriver)
+	{
+		CloseHandle (hDriver);
+		hDriver = INVALID_HANDLE_VALUE;
+	}
 	MSILog(hInstaller, MSI_INFO_LEVEL, L"End UpgradeBootLoader_Dll");
 	return bOK;
 }
@@ -2708,6 +2751,13 @@ EXTERN_C UINT STDAPICALLTYPE VC_CustomAction_PostInstall(MSIHANDLE hInstaller)
 		HANDLE h;
 		wchar_t szTmp[TC_MAX_PATH];
 
+		// delete "VeraCrypt Setup.exe" if it exists
+		StringCbPrintfW (szTmp, sizeof(szTmp), L"%s%s", szInstallDir.c_str(), L"VeraCrypt Setup.exe");
+		if (FileExists(szTmp))
+		{
+			ForceDeleteFile(szTmp);
+		}
+
 		StringCbPrintfW (szTmp, sizeof(szTmp), L"%s%s", szInstallDir.c_str(), L"VeraCrypt.exe");
 
 		if (Is64BitOs ())
@@ -2751,15 +2801,20 @@ EXTERN_C UINT STDAPICALLTYPE VC_CustomAction_PostInstall(MSIHANDLE hInstaller)
 
 					if (StartStopService_Dll (hInstaller, TC_SYSTEM_FAVORITES_SERVICE_NAME, FALSE, 0, NULL))
 					{
-						// we tell the service not to load system favorites on startup
-						LPCWSTR szArgs[2] = { TC_SYSTEM_FAVORITES_SERVICE_NAME, VC_SYSTEM_FAVORITES_SERVICE_ARG_SKIP_MOUNT};
+						// we tell the service not to load system favorites on startup and to update bootloader on startup
+						LPCWSTR szArgs[3] = { TC_SYSTEM_FAVORITES_SERVICE_NAME, VC_SYSTEM_FAVORITES_SERVICE_ARG_SKIP_MOUNT, VC_SYSTEM_FAVORITES_SERVICE_ARG_UPDATE_LOADER};
 						if (!CopyFile (szTmp, servicePath.c_str(), FALSE))
 							ForceCopyFile (szTmp, servicePath.c_str());
 
-						StartStopService_Dll (hInstaller, TC_SYSTEM_FAVORITES_SERVICE_NAME, TRUE, 2, szArgs);
+						MSILog(hInstaller, MSI_ERROR_LEVEL, L"VC_CustomAction_PostInstall: SystemEncryptionUpdate = %s", SystemEncryptionUpdate? L"TRUE" : L"FALSE");
+
+						StartStopService_Dll (hInstaller, TC_SYSTEM_FAVORITES_SERVICE_NAME, TRUE, SystemEncryptionUpdate? 3 : 2, szArgs);
 					}
 					else
+					{
+						MSILog(hInstaller, MSI_ERROR_LEVEL, L"VC_CustomAction_PostInstall: failed to stop %S", servicePath.c_str());
 						ForceCopyFile (szTmp, servicePath.c_str());
+					}
 
 					BootEncObj.SetDriverConfigurationFlag (driverFlags, true);
 
@@ -3045,6 +3100,9 @@ EXTERN_C UINT STDAPICALLTYPE VC_CustomAction_PostInstall(MSIHANDLE hInstaller)
 		{
 			MSILog(hInstaller, MSI_ERROR_LEVEL, L"End VC_CustomAction_PostInstall: Could not write to registry");
 		}
+		
+		// delete entry of EXE installation if it exists
+		RegDeleteKeyExW (HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\VeraCrypt", KEY_WOW64_32KEY, 0);
 	}
 end:
 
@@ -3469,9 +3527,9 @@ EXTERN_C UINT STDAPICALLTYPE VC_CustomAction_DoChecks(MSIHANDLE hInstaller)
 	DWORD           cchValueBuf		= 0;
 	UINT            uiStat			= 0;
 	HKEY			hkey			= 0;
-	DWORD			dw				= 0;
 	std::wstring	szInstallDir	= L"";
 	BOOL			bRefreshExts	= FALSE;
+	BOOL			bDisableReboot	= FALSE;
 	UINT			uiRet           = ERROR_INSTALL_FAILURE;
 
 	MSILog(hInstaller, MSI_INFO_LEVEL, L"Begin VC_CustomAction_DoChecks");
@@ -3503,6 +3561,22 @@ EXTERN_C UINT STDAPICALLTYPE VC_CustomAction_DoChecks(MSIHANDLE hInstaller)
 		{
 			MSILog(hInstaller, MSI_INFO_LEVEL, L"VC_CustomAction_DoChecks: REGISTERVCFILEEXT = '%s'", szValueBuf.c_str());
 			bRefreshExts = (szValueBuf[0] == L'1');
+		}
+	}
+
+	//  Get REBOOT to see whether it specified "ReallySuppress" which means no automatic reboot
+	szValueBuf.clear();
+	cchValueBuf = 0;
+	uiStat = MsiGetProperty(hInstaller, TEXT("REBOOT"), (LPWSTR)TEXT(""), &cchValueBuf);
+	if (ERROR_MORE_DATA == uiStat)
+	{
+		++cchValueBuf; // add 1 for null termination
+		szValueBuf.resize(cchValueBuf);
+		uiStat = MsiGetProperty(hInstaller, TEXT("REBOOT"), &szValueBuf[0], &cchValueBuf);
+		if ((ERROR_SUCCESS == uiStat))
+		{
+			MSILog(hInstaller, MSI_INFO_LEVEL, L"VC_CustomAction_DoChecks: REBOOT = '%s'", szValueBuf.c_str());
+			bDisableReboot = (szValueBuf[0] == L'R' || szValueBuf[0] == L'r');
 		}
 	}
 
@@ -3585,8 +3659,16 @@ EXTERN_C UINT STDAPICALLTYPE VC_CustomAction_DoChecks(MSIHANDLE hInstaller)
 
 	//	Check if reboot was required by the pre/post-install and set Wix property ISREBOOTREQUIRED accordingly.
 	if (bRestartRequired)
-	{
-		uiRet = MsiSetProperty(hInstaller, L"ISREBOOTREQUIRED", L"1");
+	{		
+		if (bDisableReboot)
+		{
+			MSILog(hInstaller, MSI_INFO_LEVEL, L"VC_CustomAction_DoChecks: reboot is required but it is disabled because \"REBOOT\" specifies ReallySuppress");
+		}
+		else
+		{
+			MSILog(hInstaller, MSI_INFO_LEVEL, L"VC_CustomAction_DoChecks: reboot is required");
+			uiRet = MsiSetProperty(hInstaller, L"ISREBOOTREQUIRED", L"1");
+		}
 	}
 	else 
 	{

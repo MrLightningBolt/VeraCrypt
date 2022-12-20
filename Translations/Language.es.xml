@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VeraCrypt>
-  <localization prog-version= "1.24-Update9-Beta-21-08-15">
+  <localization prog-version= "1.26">
     <language langid="es" name="Español" en-name="Spanish" version="1.0.0" translators="Juan Antonio Auñón Ochando" />
     <font lang="es" class="normal" size="11" face="default" />
     <font lang="es" class="bold" size="13" face="Arial" />
@@ -955,7 +955,7 @@
     <entry lang="es" key="HEADER_RESTORE_INTERNAL">Restaurar la cabecera de volumen desde la copia de seguridad insertada en el volumen</entry>
     <entry lang="es" key="HEADER_RESTORE_EXTERNAL">Restaurar la cabecera de volumen desde un archivo de copia de seguridad externo</entry>
     <entry lang="es" key="HEADER_BACKUP_SIZE_INCORRECT">El tamaño del archivo de copia de seguridad de la cabecera del volumen es incorrecto.</entry>
-    <entry lang="es" key="VOLUME_HAS_NO_BACKUP_HEADER">No hay ninguna copia de seguridad de cabecera insertada en este volumen (recuerde que sólo los volúmenes creados por VeraCrypt 6.0 o posterior contienen copias de seguridad de cabecera insertadas).</entry>
+    <entry lang="es" key="VOLUME_HAS_NO_BACKUP_HEADER">No hay ninguna copia de seguridad de cabecera insertada en este volumen (recuerde que sólo los volúmenes creados por TrueCrypt 6.0 o posterior contienen copias de seguridad de cabecera insertadas).</entry>
     <entry lang="es" key="BACKUP_HEADER_NOT_FOR_SYS_DEVICE">Está intentando realizar copias de seguridad de la cabecera de la partición/unidad del sistema. Esto no está permitido. Las operaciones de copia de seguridad o restauración relacionadas con la partición/unidad del sistema sólo se pueden realizar usando el Disco de Rescate VeraCrypt.\n\n¿Desea crear un Disco de Rescate VeraCrypt?</entry>
     <entry lang="es" key="RESTORE_HEADER_NOT_FOR_SYS_DEVICE">Está intentando restaurar la cabecera de un volumen virtual VeraCrypt pero ha seleccionado la partición/unidad del sistema. Esto no está permitido. Las operaciones de copia de seguridad o restauración relacionadas con la partición/unidad del sistema sólo se pueden realizar usando el Disco de Rescate VeraCrypt.\n\n¿Desea crear un Disco de Rescate VeraCrypt?</entry>
     <entry lang="es" key="RESCUE_DISK_NON_WIZARD_CREATION_SELECT_PATH">Después de pulsar Aceptar, seleccionará un nombre de archivo para la nueva imagen del Disco de Rescate VeraCrypt y la ubicación donde desea colocarla.</entry>
@@ -1565,6 +1565,9 @@
     <entry lang="en" key="UNKNOWN_OPTION">Unknown option</entry>
     <entry lang="en" key="VOLUME_LOCATION">Volume Location</entry>
     <entry lang="en" key="VOLUME_HOST_IN_USE">WARNING: The host file/device {0} is already in use!\n\nIgnoring this can cause undesired results including system instability. All applications that might be using the host file/device should be closed before mounting the volume.\n\nContinue mounting?</entry>
+    <entry lang="en" key="CANT_INSTALL_WITH_EXE_OVER_MSI">VeraCrypt was previously installed using an MSI package and so it can't be updated using the standard installer.\n\nPlease use the MSI package to update your VeraCrypt installation.</entry>
+    <entry lang="en" key="IDC_USE_ALL_FREE_SPACE">Use all available free space</entry>
+	<entry lang="en" key="SYS_ENCRYPTION_UPGRADE_UNSUPPORTED_ALGORITHM">VeraCrypt cannot be upgraded because the system partition/drive was encrypted using an algorithm that is not supported anymore.\nPlease decrypt your system before upgrading VeraCrypt and then encrypt it again.</entry>
   </localization>
   <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="VeraCrypt">
