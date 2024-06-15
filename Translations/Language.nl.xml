@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VeraCrypt>
-  <localization prog-version= "1.26">
+  <localization prog-version= "1.26.10">
     <language langid="nl" name="Nederlands" en-name="Dutch" version="0.0.0" translators="Jan van der Wal, Peter Tak, Thomas De Rocker"/>
-
     <font lang="nl" class="normal" size="11" face="default"/>
     <font lang="nl" class="bold" size="13" face="Arial"/>
     <font lang="nl" class="fixed" size="12" face="Lucida Console"/>
@@ -59,7 +58,7 @@
     <entry lang="nl" key="IDC_OPEN_OUTER_VOLUME">Buitenste volume openen</entry>
     <entry lang="nl" key="IDC_PAUSE">Pauzeren</entry>
     <entry lang="nl" key="IDC_PIM_ENABLE">PIM gebruiken</entry>
-    <entry lang="nl" key="IDC_NEW_PIM_ENABLE">PIM wijzigen</entry>
+    <entry lang="nl" key="IDC_NEW_PIM_ENABLE">PIM gebruiken</entry>
     <entry lang="nl" key="IDC_QUICKFORMAT">Snelformatteren</entry>
     <entry lang="nl" key="IDC_SHOW_PASSWORD">Wachtwoord weergeven</entry>
     <entry lang="nl" key="IDC_SHOW_PASSWORD_SINGLE">Wachtwoord weergeven</entry>
@@ -71,7 +70,7 @@
     <entry lang="nl" key="IDC_SYS_DEVICE">De systeempartitie of de gehele systeemschijf versleutelen</entry>
     <entry lang="nl" key="IDC_SYS_PARTITION">De Windows-systeempartitie versleutelen</entry>
     <entry lang="nl" key="IDC_WHOLE_SYS_DRIVE">De hele schijf versleutelen</entry>
-    <entry lang="nl" key="IDD_VOL_CREATION_WIZARD_DLG">VeraCrypt-wizard</entry>
+    <entry lang="nl" key="IDD_VOL_CREATION_WIZARD_DLG">VeraCrypt wizard volume aanmaken</entry>
     <entry lang="nl" key="IDT_CLUSTER">Cluster </entry>
     <entry lang="nl" key="IDT_COLLECTING_RANDOM_DATA_NOTE">BELANGRIJK: Beweeg de muis zo willekeurig mogelijk binnen dit venster. Hoe langer u ze beweegt, hoe beter. Dit verhoogt de cryptografische kracht van de encryptiesleutels aanzienlijk. Klik vervolgens op Volgende om verder te gaan.</entry>
     <entry lang="nl" key="IDT_CONFIRM">Bevestigen:</entry>
@@ -101,7 +100,7 @@
     <entry lang="nl" key="IDT_SYS_DEVICE">Versleutelt de partitie/schijf waar Windows is geïnstalleerd. Iedereen die toegang wil krijgen tot het systeem en het wil gebruiken, bestanden wil lezen en schrijven, enz., zal elke keer voor het opstarten van Windows het juiste wachtwoord moeten invoeren. Maakt optioneel een verborgen systeem aan.</entry>
     <entry lang="nl" key="IDT_SYS_PARTITION">Selecteer deze optie om de partitie te versleutelen waar het huidige Windows-besturingssysteem is geïnstalleerd.</entry>
     <entry lang="nl" key="IDT_VOLUME_LABEL">Volumelabel in Windows:</entry>
-    <entry lang="nl" key="IDT_WIPE_MODE">Modus voor wissen</entry>
+    <entry lang="nl" key="IDT_WIPE_MODE">Modus voor wissen:</entry>
     <entry lang="nl" key="IDCLOSE">Sluiten</entry>
     <entry lang="nl" key="IDC_ALLOW_ESC_PBA_BYPASS">Laat de verificatie vóór het opstarten omzeild worden door op de Esc-toets te drukken (schakelt boot manager in)</entry>
     <entry lang="nl" key="IDC_AUTORUN_DISABLE">Niets doen</entry>
@@ -296,6 +295,7 @@
     <entry lang="nl" key="IDT_NEW_PKCS5_PRF">PKCS-5 PRF:</entry>
     <entry lang="nl" key="IDT_PW_CACHE_OPTIONS">Wachtwoordcache</entry>
     <entry lang="nl" key="IDT_SECURITY_OPTIONS">Beveiligingsopties</entry>
+    <entry lang="nl" key="IDT_EMV_OPTIONS">EMV-opties</entry>
     <entry lang="nl" key="IDT_TASKBAR_ICON">VeraCrypt-achtergrondtaak</entry>
     <entry lang="nl" key="IDT_TRAVELER_MOUNT">Te koppelen VeraCrypt-volume (t.o.v. reisschijf-basismap):</entry>
     <entry lang="nl" key="IDT_TRAVEL_INSERTION">Bij plaatsen van de reisschijf: </entry>
@@ -357,7 +357,7 @@
     <entry lang="nl" key="IDT_KEYFILE_WARNING">WAARSCHUWING: als u een sleutelbestand verliest of als er een bit van de eerste 1024 KiB verandert, is het onmogelijk om volumes te koppelen die het sleutelbestand gebruiken!</entry>
     <entry lang="nl" key="IDT_KEY_UNIT">bits</entry>
     <entry lang="nl" key="IDT_NUMBER_KEYFILES">Aantal sleutelbestanden:</entry>
-    <entry lang="nl" key="IDT_KEYFILES_SIZE">Grootte sleutelbestand (bytes):</entry>
+    <entry lang="nl" key="IDT_KEYFILES_SIZE">Grootte sleutelbestanden:</entry>
     <entry lang="nl" key="IDT_KEYFILES_BASE_NAME">Basisnaam sleutelbestanden:</entry>
     <entry lang="nl" key="IDT_LANGPACK_AUTHORS">Vertaald door:</entry>
     <entry lang="nl" key="IDT_PLAINTEXT">Grootte van platte tekst:</entry>
@@ -390,6 +390,7 @@
     <entry lang="nl" key="ADMINISTRATOR">Beheerder</entry>
     <entry lang="nl" key="ADMIN_PRIVILEGES_DRIVER">Om het VeraCrypt-stuurprogramma te laden, moet u ingelogd zijn op een account met beheerdersrechten.</entry>
     <entry lang="nl" key="ADMIN_PRIVILEGES_WARN_DEVICES">Om een partitie/apparaat te versleutelen, te ontsleutelen of te formatteren, moet u aangemeld zijn bij een account met beheerdersrechten.\n\nDit is niet van toepassing op volumes die door bestanden worden gehost.</entry>
+    <entry lang="nl" key="ADMIN_PRIVILEGES_WARN_MANAGE_VOLUME">Kan snelle bestandsaanmaak niet inschakelen: Administratorrechten vereist.\nStart het programma opnieuw als administrator om deze functie in te schakelen.\n\nWilt u doorgaan zonder snel bestanden maken?</entry>
     <entry lang="nl" key="ADMIN_PRIVILEGES_WARN_HIDVOL">Om een verborgen volume aan te maken moet u ingelogd zijn op een account met beheerdersrechten.\n\nDoorgaan?</entry>
     <entry lang="nl" key="ADMIN_PRIVILEGES_WARN_NTFS">Om het volume als NTFS/exFAT/ReFS te formatteren, moet u aangemeld zijn bij een account met beheerdersrechten.\n\nZonder beheerdersrechten kunt u het volume formatteren als FAT.</entry>
     <entry lang="nl" key="AES_HELP">FIPS-goedgekeurde code (Rijndael, gepubliceerd in 1998) die door Amerikaanse ministeries en instanties mag worden gebruikt om gerubriceerde informatie te beschermen tot op het topgeheime niveau. 256-bit sleutel, 128-bit blok, 14 ronden (AES-256). Werkingswijze is XTS.</entry>
@@ -489,7 +490,7 @@
     <entry lang="nl" key="DEVICE_TRANSFORM_MODE_PAGE_INPLACE_HELP">De volledige geselecteerde partitie en alle gegevens die erop zijn opgeslagen worden ter plaatse versleuteld. Als de partitie leeg is, moet u de andere optie kiezen (het volume zal veel sneller worden aangemaakt).</entry>
     <entry lang="nl" key="NOTE_BEGINNING">Opmerking: </entry>
     <entry lang="nl" key="RESUME">Hervatten</entry>
-    <entry lang="nl" key="DEFER">Annuleren</entry>
+    <entry lang="nl" key="DEFER">Uitstellen</entry>
     <entry lang="nl" key="START">Starten</entry>
     <entry lang="nl" key="CONTINUE">Doorgaan</entry>
     <entry lang="nl" key="FORMAT">Formatteren</entry>
@@ -612,7 +613,7 @@
     <entry lang="nl" key="FAVORITE_PIM_CHANGED">Dit volume is geregistreerd als een systeemfavoriet en zijn PIM is gewijzigd.\nWilt u dat VeraCrypt de configuratie van de systeemfavorieten automatisch bijwerkt (beheerdersrechten vereist)?\n\nHoud er rekening mee dat als u nee antwoordt, u de systeemfavoriet handmatig moet bijwerken.</entry>
     <entry lang="nl" key="SYS_PASSWORD_CHANGED_ASK_RESCUE_DISK">BELANGRIJK: Als u uw VeraCrypt-herstelschijf niet hebt vernietigd, kan uw systeempartitie/-schijf nog steeds worden ontsleuteld met behulp van het oude wachtwoord (door vanaf de VeraCrypt-herstelschijf op te starten en het oude wachtwoord in te voeren). U moet een nieuwe VeraCrypt-herstelschijf aanmaken en vervolgens de oude vernietigen.\n\nWilt u een nieuwe VeraCrypt-herstelschijf aanmaken?</entry>
     <entry lang="nl" key="SYS_HKD_ALGO_CHANGED_ASK_RESCUE_DISK">Merk op dat uw VeraCrypt-herstelschijf nog steeds het vorige algoritme gebruikt. Als u het vorige algoritme onveilig vindt, moet u een nieuwe VeraCrypt-herstelschijf maken en vervolgens de oude schijf vernietigen.\n\nWilt u een nieuwe VeraCrypt-herstelschijf aanmaken?</entry>
-    <entry lang="nl" key="KEYFILES_NOTE">Elk soort bestand (bijvoorbeeld .mp3, .jpg, .zip, .avi, .mp3, .jpg, .zip, .avi) kan gebruikt worden als VeraCrypt-sleutelbestand. Merk op dat VeraCrypt de inhoud van het sleutelbestand nooit wijzigt. U kunt meer dan één sleutelbestand selecteren (de volgorde maakt niet uit). Als u een map toevoegt, worden alle niet-verborgen bestanden in deze map gebruikt als sleutelbestanden. Klik op 'tokenbestanden toevoegen' om sleutelbestanden te selecteren op veiligheidstokens of smartcards (of om ze te importeren in veiligheidstokens of smartcards).</entry>
+    <entry lang="nl" key="KEYFILES_NOTE">Merk op dat VeraCrypt de inhoud van het sleutelbestand nooit wijzigt. U kunt meer dan één sleutelbestand selecteren (de volgorde maakt niet uit). Als u een map toevoegt, worden alle niet-verborgen bestanden in deze map gebruikt als sleutelbestanden. Klik op 'tokenbestanden toevoegen' om sleutelbestanden te selecteren op veiligheidstokens of smartcards (of om ze te importeren in veiligheidstokens of smartcards).</entry>
     <entry lang="nl" key="KEYFILE_CHANGED">Sleutelbestand(en) met succes toegevoegd/verwijderd.</entry>
     <entry lang="nl" key="KEYFILE_EXPORTED">Sleutelbestand geëxporteerd.</entry>
     <entry lang="nl" key="PKCS5_PRF_CHANGED">Sleutel-afleidingsalgoritme van header met succes ingesteld.</entry>
@@ -939,7 +940,7 @@
     <entry lang="nl" key="ENTER_HEADER_BACKUP_PASSWORD">Voer het wachtwoord in voor de header die in het back-upbestand is opgeslagen</entry>
     <entry lang="nl" key="KEYFILE_CREATED">Sleutelbestanden zijn met succes aangemaakt.</entry>
     <entry lang="nl" key="KEYFILE_INCORRECT_NUMBER">Het aantal door u opgegeven sleutelbestanden is ongeldig.</entry>
-    <entry lang="nl" key="KEYFILE_INCORRECT_SIZE">De grootte van het sleutelbestand moet liggen tussen 64 en 1048576 bytes.</entry>
+    <entry lang="nl" key="KEYFILE_INCORRECT_SIZE">Het sleutelbestand moet ten minste 64 bytes groot zijn.</entry>
     <entry lang="nl" key="KEYFILE_EMPTY_BASE_NAME">Voer een naam in voor de aan te maken sleutelbestanden.</entry>
     <entry lang="nl" key="KEYFILE_INVALID_BASE_NAME">Basisnaam van sleutelbestand(en) is ongeldig</entry>
     <entry lang="nl" key="KEYFILE_ALREADY_EXISTS">Het sleutelbestand '%s' bestaat al.\nWilt u het overschrijven? Het genereren wordt gestopt als u nee antwoordt.</entry>
@@ -970,7 +971,7 @@
     <entry lang="nl" key="ERROR_CREATING_RESCUE_DISK">Fout bij het aanmaken van de VeraCrypt-herstelschijf.</entry>
     <entry lang="nl" key="CANNOT_CREATE_RESCUE_DISK_ON_HIDDEN_OS">De VeraCrypt-herstelschijf kan niet worden aangemaakt wanneer een verborgen besturingssysteem draait.\n\nOm een VeraCrypt-herstelschijf aan te maken, start u het afleidingsbesturingssysteem op en selecteert u vervolgens 'systeem' &gt; 'herstelschijf aanmaken'.</entry>
     <entry lang="nl" key="RESCUE_DISK_CHECK_FAILED">Kan niet verifiëren of de herstelschijf correct is gebrand.\n\nAls u de herstelschijf hebt gebrand, moet u de cd/dvd uitwerpen en opnieuw plaatsen; klik vervolgens op Volgende om het opnieuw te proberen. Als dit niet helpt, probeer dan een ander medium%s.\n\nAls u de herstelschijf nog niet hebt gebrand, doe dit dan en klik vervolgens op Volgende.\n\nAls u geprobeerd hebt een VeraCrypt-herstelschijf te verifiëren die is gemaakt voordat u deze wizard opstartte, moet u er rekening mee houden dat een dergelijke herstelschijf niet kan worden gebruikt, omdat deze voor een andere hoofdsleutel is gemaakt. U moet de nieuw gegenereerde herstelschijf branden.</entry>
-    <entry lang="nl" key="RESCUE_DISK_CHECK_FAILED_SENTENCE_APPENDIX"> en/of andere cd/dvd-opname-software</entry>
+    <entry lang="nl" key="RESCUE_DISK_CHECK_FAILED_SENTENCE_APPENDIX"> en/of andere cd/dvd-opname-software</entry>
     <entry lang="nl" key="SYSTEM_FAVORITES_DLG_TITLE">VeraCrypt - Systeemfavoriete volumes</entry>
     <entry lang="nl" key="SYS_FAVORITES_HELP_LINK">Wat zijn systeemfavoriete volumes?</entry>
     <entry lang="nl" key="SYS_FAVORITES_REQUIRE_PBA">De systeempartitie/-schijf lijkt niet versleuteld te zijn.\n\nSysteemfavoriete volumes kunnen worden gekoppeld met alleen een authenticatiewachtwoord voor het opstarten. Om het gebruik van systeemfavoriete volumes mogelijk te maken, moet u daarom eerst de systeempartitie/-schijf versleutelen.</entry>
@@ -1107,7 +1108,7 @@
     <entry lang="nl" key="KEYFILES_NOT_SUPPORTED_FOR_SYS_ENCRYPTION">Sleutelbestanden worden momenteel niet ondersteund voor systeemversleuteling.</entry>
     <entry lang="nl" key="CANNOT_RESTORE_KEYBOARD_LAYOUT">Waarschuwing: VeraCrypt kon de oorspronkelijke toetsenbordindeling niet herstellen. Dit kan ertoe leiden dat u een verkeerd wachtwoord invoert.</entry>
     <entry lang="nl" key="CANT_CHANGE_KEYB_LAYOUT_FOR_SYS_ENCRYPTION">Fout: Kan de toetsenbordindeling voor VeraCrypt niet instellen op de standaard Amerikaanse toetsenbordindeling.\n\nMerk op dat het wachtwoord moet worden ingevoerd in de pre-boot omgeving (voordat Windows start) waar niet-Amerikaanse Windows toetsenbordindelingen niet beschikbaar zijn. Daarom moet het wachtwoord altijd worden ingetypt met de standaard Amerikaanse toetsenbordindeling.</entry>
-    <entry lang="nl" key="ALT_KEY_CHARS_NOT_FOR_SYS_ENCRYPTION">Het is niet mogelijk om tekens te typen door op toetsen te drukken terwijl de rechter Alt-toets ingedrukt wordt gehouden. U kunt echter wel de meeste van dergelijke tekens typen door de juiste toetsen in te drukken terwijl de Shift-toets ingedrukt wordt gehouden.</entry>
+    <entry lang="nl" key="ALT_KEY_CHARS_NOT_FOR_SYS_ENCRYPTION">Omdat VeraCrypt de toetsenbordindeling tijdelijk heeft gewijzigd naar de standaard Amerikaanse toetsenbordindeling, is het niet mogelijk om tekens te typen door op de toetsen te drukken terwijl de rechter Alt-toets ingedrukt wordt gehouden. U kunt de meeste van deze tekens echter wel typen door de juiste toetsen in te drukken terwijl u de Shift-toets ingedrukt houdt.</entry>
     <entry lang="nl" key="KEYB_LAYOUT_CHANGE_PREVENTED">VeraCrypt verhinderde wijziging van de toetsenbordindeling.</entry>
     <entry lang="nl" key="KEYB_LAYOUT_SYS_ENC_EXPLANATION">Opmerking: het wachtwoord moet worden getypt in de pre-boot-omgeving (voordat Windows start) waar niet-Amerikaanse Windows-toetsenbordindelingen niet beschikbaar zijn. Daarom moet het wachtwoord altijd worden ingevoerd met behulp van de standaard Amerikaanse toetsenbordindeling. Het is echter belangrijk op te merken dat u GEEN echt Amerikaans toetsenbord nodig hebt. VeraCrypt zorgt er automatisch voor dat u het wachtwoord veilig kunt typen (nu en in de pre-boot omgeving), zelfs als u GEEN echt Amerikaans toetsenbord hebt.</entry>
     <entry lang="nl" key="RESCUE_DISK_INFO">Voordat u de partitie/schijf kunt versleutelen, moet u een VeraCrypt-herstelschijf (VRD, VeraCrypt Rescue Disk) aanmaken, die voor het volgende dient:\n\n- Als de VeraCrypt-bootloader, master key of andere kritische gegevens beschadigd raken, kunt u ze via de VRD herstellen (let wel, dan moet u nog steeds het juiste wachtwoord invoeren).\n\n- Als Windows beschadigd raakt en niet kan starten, kunt u met de VRD de partitie of de schijf permanent ontsleutelen voordat Windows start.\n\n- De VRD bevat een back-up van de huidige inhoud van de eerste track op de schijf (die meestal een system loader of boot manager bevat) en staat u toe om hem te herstellen indien nodig.\n\nDe VeraCrypt-herstelschijf ISO-image zal worden gemaakt op de hieronder opgegeven locatie.</entry>
@@ -1155,7 +1156,7 @@
     <entry lang="nl" key="WINDOWS_BOOT_LOADER_HINTS">Als het huidige besturingssysteem geïnstalleerd is op de opstartpartitie, dan moet u, nadat u ze versleuteld hebt, het juiste wachtwoord invoeren, zelfs als u een of meer andere niet-versleutelde Windows-systemen wilt starten (omdat ze één enkele versleutelde Windows bootloader/manager zullen delen).\n\nIn tegenstelling, als het huidige besturingssysteem niet geïnstalleerd is op de opstartpartitie (of als de Windows bootloader/manager niet gebruikt wordt door een ander systeem), dan zult u, nadat u dit systeem versleuteld hebt, niet het juiste wachtwoord moeten ingeven om de andere niet-versleutelde systemen op te starten -- u hoeft enkel op de Esc-toets te drukken om het niet-versleutelde systeem op te starten (als er meerdere niet-versleutelde systemen zijn, dan moet u ook kiezen welk systeem u wilt starten in het VeraCrypt Boot Manager menu).\n\nOpmerking: meestal wordt het vroegst geïnstalleerde Windows-systeem geïnstalleerd op de opstartpartitie.</entry>
     <entry lang="nl" key="SYSENC_PRE_DRIVE_ANALYSIS_TITLE">Versleuteling van het beschermde gebied van de host</entry>
     <entry lang="nl" key="SYSENC_PRE_DRIVE_ANALYSIS_HELP">Aan het einde van veel schijven is er een gebied dat normaal gesproken verborgen is voor het besturingssysteem (dergelijke gebieden worden meestal aangeduid als Host Protected Areas). Sommige programma's kunnen echter gegevens van/naar dergelijke gebieden lezen en schrijven.\n\nWAARSCHUWING: sommige computerfabrikanten kunnen dergelijke gebieden gebruiken om hulpmiddelen en gegevens op te slaan voor RAID, systeemherstel, systeeminstellingen, diagnose of andere doeleinden. Als dergelijke tools of gegevens toegankelijk moeten zijn voor het opstarten, mag het verborgen gebied NIET worden versleuteld (kies 'Nee' hierboven).\n\nWilt u dat VeraCrypt zo'n verborgen gebied (indien aanwezig) aan het einde van de systeemschijf detecteert en versleutelt? </entry>
-    <entry lang="nl" key="SYSENC_TYPE_PAGE_TITLE">Windows-schijf versleutelen (%c:)</entry>
+    <entry lang="nl" key="SYSENC_TYPE_PAGE_TITLE">Type systeemversleuteling</entry>
     <entry lang="nl" key="SYSENC_NORMAL_TYPE_HELP">Selecteer deze optie als u alleen de systeempartitie of de gehele systeemschijf wilt versleutelen.</entry>
     <entry lang="nl" key="SYSENC_HIDDEN_TYPE_HELP">Het kan gebeuren dat u door iemand gedwongen wordt om het besturingssysteem te ontsleutelen. Er zijn veel situaties waarin u dit niet kunt weigeren (bijvoorbeeld door afpersing). Als u deze optie selecteert, maakt u een verborgen besturingssysteem aan waarvan het bestaan onmogelijk te bewijzen zou moeten zijn (op voorwaarde dat bepaalde richtlijnen worden gevolgd). U moet dus het verborgen besturingssysteem niet ontsleutelen of het wachtwoord ervan vrijgeven. Voor een gedetailleerde uitleg, klik op de onderstaande link.</entry>
     <entry lang="nl" key="HIDDEN_OS_PREINFO">Het kan gebeuren dat u door iemand gedwongen wordt om het besturingssysteem te ontsleutelen. Er zijn veel situaties waarin u dit niet kunt weigeren (bijvoorbeeld door afpersing).\n\nMet behulp van deze wizard kunt u een verborgen besturingssysteem aanmaken waarvan het bestaan onmogelijk te bewijzen zou moeten zijn (op voorwaarde dat bepaalde richtlijnen worden gevolgd). Zo moet u het verborgen besturingssysteem niet ontsleutelen of het wachtwoord ervan vrijgeven.</entry>
@@ -1174,7 +1175,7 @@
     <entry lang="nl" key="CD_BURNER_NOT_PRESENT_WILL_STORE_ISO_INFO">Volg deze stappen:\n\n1) Sluit nu een verwisselbaar station, zoals een USB-flashstation, aan op uw computer.\n\n2) Kopieer het image-bestand van de VeraCrypt-herstelschijf (%s) naar de verwisselbare schijf.\n\nIn het geval dat u de VeraCrypt-herstelschijf in de toekomst moet gebruiken, kunt u uw verwisselbare schijf (die de VeraCrypt-herstelschijf-image bevat) aansluiten op een computer met een cd/dvd-brander en een opstartbare VeraCrypt-herstelschijf maken door de image te branden op een cd of dvd. BELANGRIJK: Merk op dat het image-bestand van de VeraCrypt-herstelschijf moet worden geschreven naar de cd/dvd als een ISO-schijfafbeelding (niet als een individueel bestand).</entry>
     <entry lang="nl" key="RESCUE_DISK_RECORDING_TITLE">Herstelschijf branden</entry>
     <entry lang="nl" key="RESCUE_DISK_CREATED_TITLE">Herstelschijf aangemaakt</entry>
-    <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_TITLE">Systeemversleuteling-test</entry>
+    <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_TITLE">Systeemversleuteling-pretest</entry>
     <entry lang="nl" key="RESCUE_DISK_DISK_VERIFIED_TITLE">Herstelschijf gecontroleerd</entry>
     <entry lang="nl" key="RESCUE_DISK_VERIFIED_INFO">\nDe VeraCrypt-herstelschijf is met succes geverifieerd. Verwijder ze nu uit het station en bewaar ze op een veilige plaats.\n\nKlik op Volgende om verder te gaan.</entry>
     <entry lang="nl" key="REMOVE_RESCUE_DISK_FROM_DRIVE">WAARSCHUWING: tijdens de volgende stappen mag de VeraCrypt-herstelschijf zich niet in het station bevinden. Anders is het niet mogelijk om de stappen correct uit te voeren.\n\nHaal de schijf nu uit het station en bewaar ze op een veilige plaats. Klik vervolgens op OK.</entry>
@@ -1184,9 +1185,9 @@
     <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_INFO2_PORTION_2">Wat te doen als Windows niet kan starten\n------------------------------------------------\n\nOpmerking: Deze instructies zijn alleen geldig als u nog niet bent begonnen met versleutelen.\n\n- Als Windows niet start nadat u het juiste wachtwoord hebt ingevoerd (of als u herhaaldelijk het juiste wachtwoord invoert, maar VeraCrypt zegt dat het wachtwoord onjuist is), raak dan niet in paniek. Start de computer opnieuw op (uit en aan) en druk in het VeraCrypt-bootloaderscherm op de Esc-toets op uw toetsenbord (en als u meerdere systemen hebt, kies dan welke u wilt starten). Dan zou Windows moeten starten (op voorwaarde dat het niet versleuteld is) en VeraCrypt zal automatisch vragen of u de pre-boot authenticatiecomponent wilt verwijderen. Merk op dat de vorige stappen NIET werken als de systeempartitie/schijf versleuteld is (niemand kan Windows starten of toegang krijgen tot versleutelde gegevens op de schijf zonder het juiste wachtwoord, zelfs als hij of zij de vorige stappen volgt).\n\n</entry>
     <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_INFO2_PORTION_3">- Als de vorige stappen niet helpen of als het VeraCrypt bootloader-scherm niet verschijnt (voordat Windows start), plaatst u de VeraCrypt-herstelschijf in uw cd/dvd-station en start u de computer opnieuw op. Als het VeraCrypt-herstelschijfscherm niet verschijnt (of als u het item 'herstelopties' niet ziet in de sectie 'toetsenbordbediening' van het VeraCrypt-herstelschijfscherm), is het mogelijk dat uw BIOS zo is geconfigureerd dat het probeert op te starten vanaf een harde schijf vóór een cd-/dvd-station. Als dat het geval is, start uw computer opnieuw op, druk op F2 of Delete (zodra u een BIOS-opstartscherm ziet), en wacht tot een BIOS-configuratiescherm verschijnt. Als er geen BIOS-configuratiescherm verschijnt, start (reset) de computer opnieuw op en druk op F2 of Delete zodra u de computer opnieuw opstart (reset). Wanneer een BIOS-configuratiescherm verschijnt, configureer dan eerst uw BIOS om vanaf het cd/dvd-station op te starten (raadpleeg de documentatie van uw BIOS/moederbord of neem contact op met het technische ondersteuningsteam van uw computer voor hulp). Start vervolgens uw computer opnieuw op. Het VeraCrypt-herstelschijfscherm zou nu moeten verschijnen. Selecteer in het VeraCrypt-herstelschijfscherm 'herstelopties' door op F8 op uw toetsenbord te drukken. Selecteer in het menu 'herstelopties' de optie 'oorspronkelijke systeemlader herstellen'. Verwijder vervolgens de herstelschijf uit uw cd/dvd-station en start uw computer opnieuw op. Windows zou normaal moeten starten (op voorwaarde dat het niet versleuteld is).\n\n</entry>
     <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_INFO2_PORTION_4">Merk op dat de vorige stappen NIET werken als de systeempartitie/-schijf versleuteld is (niemand kan Windows starten of toegang krijgen tot versleutelde gegevens op de schijf zonder het juiste wachtwoord, zelfs als hij of zij de vorige stappen volgt).\n\n\nMerk op dat zelfs als u uw VeraCrypt-herstelschijf verliest en een aanvaller deze vindt, hij of zij NIET in staat zal zijn om de systeempartitie of -schijf te ontsleutelen zonder het juiste wachtwoord. </entry>
-    <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_RESULT_TITLE">Pretest met succes voltooid</entry>
-    <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_RESULT_INFO">Als de versleuteling wordt onderbroken, kunt u deze hervatten door VeraCrypt opnieuw op te starten en 'Systeem' &gt; 'Onderbroken proces hervatten' te selecteren.\n\nZorg ervoor dat uw apparaat niet zonder stroom komt te zitten tijdens het versleutelingsproces.</entry>
-    <entry lang="nl" key="SYSENC_ENCRYPTION_PAGE_INFO">Zorg ervoor dat uw apparaat niet zonder stroom komt te zitten.\nAls de versleuteling wordt onderbroken, kunt u deze hervatten door VeraCrypt opnieuw op te starten en 'Systeem' &gt; 'Onderbroken proces hervatten' te selecteren.</entry>
+    <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_RESULT_TITLE">Voorafgaande test voltooid</entry>
+    <entry lang="nl" key="SYS_ENCRYPTION_PRETEST_RESULT_INFO">De voorafgaande test is met succes afgerond.\n\nWAARSCHUWING: als de stroomtoevoer plotseling wordt onderbroken terwijl bestaande gegevens ter plaatse worden versleuteld, of als het besturingssysteem crasht als gevolg van een software- of hardwarefout terwijl VeraCrypt bestaande gegevens ter plaatse versleutelt, zullen delen van de gegevens beschadigd of verloren gaan. Voordat u begint met het versleutelen, moet u ervoor zorgen dat u back-ups hebt van de bestanden die u wilt versleutelen. Zo niet, maak dan nu een back-up van de bestanden (u kunt op uitstellen klikken, een back-up maken van de bestanden en daarna VeraCrypt op elk moment opnieuw uitvoeren en 'systeem' &gt; 'onderbroken proces hervatten' selecteren om te beginnen met het versleutelen van de bestanden).\n\nAls u klaar bent, klikt u op versleutelen om het versleutelen te starten.</entry>
+    <entry lang="nl" key="SYSENC_ENCRYPTION_PAGE_INFO">U kunt op elk moment op pauzeren of uitstellen klikken om het proces van versleuteling of ontsleuteling te onderbreken, deze wizard af te sluiten, uw computer opnieuw op te starten of af te sluiten, en dan het proces te hervatten, dat zal doorgaan vanaf het punt waar het werd gestopt. Om vertraging te voorkomen wanneer het systeem of de toepassingen gegevens van de systeemschijf schrijven of lezen, wacht VeraCrypt automatisch totdat de gegevens zijn geschreven of gelezen (zie status hierboven) en gaat dan automatisch verder met het versleutelen of ontsleutelen.</entry>
     <entry lang="nl" key="NONSYS_INPLACE_ENC_ENCRYPTION_PAGE_INFO">\n\nU kunt op elk moment op pauzeren of uitstellen klikken om het versleutelingsproces te onderbreken, deze wizard af te sluiten, de computer opnieuw op te starten of af te sluiten en vervolgens het proces te hervatten, dat verder gaat vanaf het punt waar het werd gestopt. Merk op dat het volume niet kan worden gekoppeld totdat het volledig is versleuteld.</entry>
     <entry lang="nl" key="NONSYS_INPLACE_DEC_DECRYPTION_PAGE_INFO">\n\nU kunt op elk moment op pauzeren of uitstellen klikken om het ontsleutelingsproces te onderbreken, deze wizard af te sluiten, de computer opnieuw op te starten of af te sluiten en vervolgens het proces te hervatten, dat verder gaat vanaf het punt waar het werd gestopt. Merk op dat het volume niet kan worden gekoppeld totdat het volledig is ontsleuteld.</entry>
     <entry lang="nl" key="SYSENC_HIDDEN_OS_INITIAL_INFO_TITLE">Verborgen systeem gestart</entry>
@@ -1308,7 +1309,7 @@
     <entry lang="nl" key="HOST_DEVICE_REMOVAL_DISMOUNT_WARN_TITLE">Waarschuwing: VeraCrypt-volume automatisch ontkoppeld</entry>
     <entry lang="nl" key="HOST_DEVICE_REMOVAL_DISMOUNT_WARN">Voordat u een apparaat met een gekoppeld volume fysiek verwijdert of uitschakelt, moet u altijd eerst het volume in VeraCrypt ontkoppelen.\n\nOnverwachte spontane ontkoppeling wordt meestal veroorzaakt door een intermitterend defecte kabel, schijf (behuizing), enz.</entry>
     <entry lang="nl" key="UNSUPPORTED_TRUECRYPT_FORMAT">Dit volume is aangemaakt met TrueCrypt %x.%x maar VeraCrypt ondersteunt alleen TrueCrypt-volumes die zijn aangemaakt met TrueCrypt 6.x/7.x.</entry>
-    <entry lang="nl" key="TEST">Pretest starten</entry>
+    <entry lang="nl" key="TEST">Testen</entry>
     <entry lang="nl" key="KEYFILE">Sleutelbestand</entry>
     <entry lang="nl" key="VKEY_08">Backspace</entry>
     <entry lang="nl" key="VKEY_09">Tab</entry>
@@ -1401,9 +1402,9 @@
     <entry lang="nl" key="TIME">Tijd</entry>
     <entry lang="nl" key="ITERATIONS">Iteraties</entry>
     <entry lang="nl" key="PRE-BOOT">Pre-boot</entry>
-    <entry lang="nl" key="RESCUE_DISK_EFI_INFO">\n\nAls Windows beschadigd raakt en niet meer kan starten, kunt u met de VeraCrypt-herstelschijf de partitie definitief ontsleutelen. Let er echter wel op dat u dan nog steeds het juiste wachtwoord moet invoeren!\n\n\nWAARSCHUWING: Als u in het verleden al eens een VeraCrypt-herstelschijf hebt gemaakt, kunt u deze niet opnieuw gebruiken voor deze versleuteling! Elke keer dat u deze versleutelingstool gebruikt, moet u er een nieuwe VeraCrypt-herstelschijf voor aanmaken en veilig bewaren, ook al gebruikt u hetzelfde wachtwoord.</entry>
-    <entry lang="nl" key="RESCUE_DISK_EFI_EXTRACT_INFO">Het ZIP-bestand van de herstelschijf is aangemaakt en opgeslagen in dit bestand:%s\n\nNu moet u het uitpakken naar een USB-stick die is geformatteerd als FAT/FAT32.\n\n%lsNadat u de herstelschijf hebt gemaakt, klikt u op Volgende om te controleren of ze correct is gemaakt.</entry>
-    <entry lang="nl" key="RESCUE_DISK_EFI_EXTRACT_INFO_NO_CHECK">De ZIP-image van de herstelschijf is aangemaakt en opgeslagen in dit bestand:\n%s\n\nNu moet u de image ofwel uitpakken naar een USB-stick die is geformatteerd als FAT/FAT32 of hem naar een veilige locatie verplaatsen voor later gebruik.\n\n\n\n%lsKlik op Volgende om verder te gaan.</entry>
+    <entry lang="nl" key="RESCUE_DISK_EFI_INFO">Voordat u de partitie kunt versleutelen, moet u een VeraCrypt-herstelschijf aanmaken, die de volgende doeleinden dient:\n\n- Als de VeraCrypt-bootlader, de hoofdsleutel of andere kritieke gegevens beschadigd raken, kunt u deze met de herstelschijf herstellen (let wel, dan moet u nog steeds het juiste wachtwoord invoeren).\n\n- Als Windows beschadigd raakt en niet kan starten, kunt u met de herstelschijf de partitie permanent ontsleutelen voordat Windows start.\n\n- De herstelschijf bevat een back-up van de huidige EFI-bootloader en stelt u in staat om deze indien nodig te herstellen.\n\nDe ZIP-image van de VeraCrypt-herstelschijf zal worden aangemaakt op de hieronder opgegeven locatie.</entry>
+    <entry lang="nl" key="RESCUE_DISK_EFI_EXTRACT_INFO">De ZIP-image van de herstelschijf is aangemaakt en opgeslagen in dit bestand:%s\n\nNu moet u het uitpakken naar een USB-stick die is geformatteerd als FAT/FAT32.\n\n%lsNadat u de herstelschijf hebt gemaakt, klikt u op Volgende om te controleren of ze correct is gemaakt.</entry>
+    <entry lang="nl" key="RESCUE_DISK_EFI_EXTRACT_INFO_NO_CHECK">De ZIP-image van de herstelschijf is aangemaakt en opgeslagen in dit bestand:\n%s\n\nNu moet u de image ofwel uitpakken naar een USB-stick die is geformatteerd als FAT/FAT32 of hem naar een veilige locatie verplaatsen voor later gebruik.\n\n%lsKlik op Volgende om verder te gaan.</entry>
     <entry lang="nl" key="RESCUE_DISK_EFI_EXTRACT_INFO_NOTE">BELANGRIJK: Merk op dat het zip-bestand rechtstreeks naar de root van de USB-stick moet worden uitgepakt. Als de stationsletter van de USB-stick bijvoorbeeld E: is, dan zou het uitpakken van het zip-bestand een map E:\\EFI op de USB-stick moeten aanmaken.\n\n</entry>
     <entry lang="nl" key="RESCUE_DISK_EFI_CHECK_FAILED">Kan niet controleren of de herstelschijf correct is uitgepakt.\n\nAls u de herstelschijf hebt uitgepakt, werpt u de USB-stick uit en plaatst u hem opnieuw; klik vervolgens op Volgende om het opnieuw te proberen. Als dit niet helpt, probeer dan een andere USB-stick en/of andere ZIP-software.\n\nAls u de herstelschijf nog niet hebt uitgepakt, doe dit dan en klik vervolgens op Volgende.\n\nAls u geprobeerd hebt een VeraCrypt-herstelschijf te verifiëren die is gemaakt voordat u deze wizard startte, let er dan op dat een dergelijke herstelschijf niet kan worden gebruikt, omdat deze voor een andere hoofdsleutel is gemaakt. U moet de nieuw gegenereerde ZIP-image van de herstelschijf uitpakken.</entry>
     <entry lang="nl" key="RESCUE_DISK_EFI_NON_WIZARD_CHECK_FAILED">Kan niet controleren of de herstelschijf correct is uitgepakt.\n\nAls u de herstelschijf-image naar een USB-stick hebt uitgepakt, werpt u deze uit en plaatst u hem er weer in; probeer het dan opnieuw. Als dit niet helpt, probeer dan andere ZIP-software en/of een ander medium.\n\nAls u geprobeerd hebt een VeraCrypt-herstelschijf te controleren die voor een andere hoofdsleutel, wachtwoord, salt, enz. is gemaakt, let er dan op dat deze controle altijd zal mislukken. Om een nieuwe herstelschijf aan te maken die volledig compatibel is met uw huidige configuratie, selecteert u 'systeem' &gt; 'herstelschijf aanmaken'.</entry>
@@ -1522,7 +1523,7 @@
     <entry lang="nl" key="LINUX_NOT_SUPPORTED"> (niet ondersteund door onderdelen beschikbaar op dit platform).\n</entry>
     <entry lang="nl" key="LINUX_KERNEL_OLD">Uw systeem gebruikt een oude versie van de Linux-kernel.\n\nDoor een bug in de Linux-kernel kan uw systeem stoppen met reageren bij het schrijven van gegevens naar een VeraCrypt-volume. Dit probleem kan worden opgelost door de kernel te upgraden naar versie 2.6.24 of later.</entry>
     <entry lang="nl" key="LINUX_VOL_DISMOUNTED">Volume {0} is ontkoppeld.</entry>
-    <entry lang="en" key="LINUX_VOL_MOUNTED">Volume {0} has been mounted.</entry>
+    <entry lang="nl" key="LINUX_VOL_MOUNTED">Volume {0} is gekoppeld.</entry>
     <entry lang="nl" key="LINUX_OOM">Onvoldoende geheugen.</entry>
     <entry lang="nl" key="LINUX_CANT_GET_ADMIN_PRIV">Geen beheerdersrechten verkregen</entry>
     <entry lang="nl" key="LINUX_COMMAND_GET_ERROR">Opdracht {0} gaf fout {1}.</entry>
@@ -1570,6 +1571,73 @@
     <entry lang="nl" key="CANT_INSTALL_WITH_EXE_OVER_MSI">VeraCrypt werd eerder geïnstalleerd met een MSI-pakket en kan dus niet worden bijgewerkt met het standaardinstallatieprogramma. Gebruik het MSI-pakket om uw VeraCrypt-installatie bij te werken.</entry>
     <entry lang="nl" key="IDC_USE_ALL_FREE_SPACE">Alle beschikbare vrije ruimte gebruiken</entry>
     <entry lang="nl" key="SYS_ENCRYPTION_UPGRADE_UNSUPPORTED_ALGORITHM">VeraCrypt kan niet worden bijgewerkt omdat de systeempartitie/schijf is versleuteld met een algoritme dat niet meer wordt ondersteund.\nOntsleutel uw systeem voordat u VeraCrypt bijwerkt en versleutel het dan opnieuw.</entry>
+    <entry lang="nl" key="LINUX_EX2MSG_TERMINALNOTFOUND">Er kon geen ondersteunde terminalapplicatie worden gevonden. U hebt ofwel xterm, konsole of gnome-terminal (met dbus-x11) nodig.</entry>
+    <entry lang="nl" key="IDM_MOUNT_NO_CACHE">Koppelen zonder cache</entry>
+    <entry lang="nl" key="EXPANDER_INFO">:: VeraCrypt Uitbreider ::\n\nEen VeraCrypt-volume on the fly uitbreiden zonder opnieuw te formatteren\n\n\nAlle soorten volumes (containerbestanden, schijven en partities) die met NTFS zijn geformatteerd, worden ondersteund. De enige voorwaarde is dat er voldoende vrije ruimte moet zijn op de hostschijf of het hostapparaat van het VeraCrypt-volume.\n\nGebruik deze software niet om een buitenste volume uit te breiden dat een verborgen volume bevat, omdat dit het verborgen volume vernietigt!\n</entry>
+    <entry lang="nl" key="IDC_STEPSEXPAND">1. Selecteer het VeraCrypt-volume dat moet worden uitgebreid\n2. Klik op de knop 'Koppelen'</entry>
+    <entry lang="nl" key="IDT_VOL_NAME">Volume: </entry>
+    <entry lang="nl" key="IDT_FILE_SYS">Bestandssysteem:</entry>
+    <entry lang="nl" key="IDT_CURRENT_SIZE">Huidige grootte:</entry>
+    <entry lang="nl" key="IDT_NEW_SIZE">Nieuwe grootte:</entry>
+    <entry lang="nl" key="IDT_NEW_SIZE_BOX_TITLE">Voer de nieuwe volumegrootte in</entry>
+    <entry lang="nl" key="IDC_INIT_NEWSPACE">Nieuwe ruimte met willekeurige gegevens vullen</entry>
+    <entry lang="nl" key="IDC_QUICKEXPAND">Snel uitbreiden</entry>
+    <entry lang="nl" key="IDT_INIT_SPACE">Nieuwe ruimte vullen:</entry>
+    <entry lang="nl" key="EXPANDER_FREE_SPACE">%s vrije ruimte beschikbaar op host-schijf</entry>
+    <entry lang="nl" key="EXPANDER_HELP_DEVICE">Dit is een apparaatgebaseerd VeraCrypt-volume.\n\nDe nieuwe volumegrootte wordt automatisch gekozen als de grootte van het host-apparaat.</entry>
+    <entry lang="nl" key="EXPANDER_HELP_FILE">Geef de nieuwe grootte van het VeraCrypt-volume op (moet minstens %I64u kB groter zijn dan de huidige grootte).</entry>
+    <entry lang="nl" key="QUICK_EXPAND_WARNING">WAARSCHUWING: gebruik snel uitbreiden alleen in de volgende gevallen:\n\n1) Het apparaat waar de bestandscontainer zich bevindt, bevat geen gevoelige gegevens en u hebt geen aannemelijke ontkenning nodig.\n2) Het apparaat waarde bestandscontainer zich bevindt is al op een veilige manier en volledig gecodeerd.\n\nWeet u zeker dat u snel uitbreiden wilt gebruiken?</entry>
+    <entry lang="nl" key="EXPANDER_STATUS_TEXT">BELANGRIJK: Beweeg de muis zo willekeurig mogelijk binnen dit venster. Hoe langer u ze beweegt, hoe beter. Dit verhoogt de cryptografische kracht van de encryptiesleutels aanzienlijk. Klik vervolgens op 'Doorgaan' om het volume uit te breiden.</entry>
+    <entry lang="nl" key="EXPANDER_STATUS_TEXT_LEGACY">Klik op 'Doorgaan' om het volume uit te breiden.</entry>
+    <entry lang="nl" key="EXPANDER_FINISH_ERROR">Fout: uitbreiden van volume mislukt.</entry>
+    <entry lang="nl" key="EXPANDER_FINISH_ABORT">Fout: bewerking afgebroken door gebruiker.</entry>
+    <entry lang="nl" key="EXPANDER_FINISH_OK">Klaar. Volume met succes uitgebreid.</entry>
+    <entry lang="nl" key="EXPANDER_CANCEL_WARNING">Waarschuwing: het volume wordt uitgebreid!\n\nAls u nu stopt, kan het volume beschadigd raken.\n\nWilt u echt annuleren?</entry>
+    <entry lang="nl" key="EXPANDER_STARTING_STATUS">Uitbreiden van volume starten...\n</entry>
+    <entry lang="nl" key="EXPANDER_HIDDEN_VOLUME_ERROR">Een buitenste volume dat een verborgen volume bevat kan niet worden uitgebreid, omdat dit het verborgen volume vernietigt.\n</entry>
+    <entry lang="nl" key="EXPANDER_SYSTEM_VOLUME_ERROR">Een VeraCrypt-systeemvolume kan niet worden uitgebreid.</entry>
+    <entry lang="nl" key="EXPANDER_NO_FREE_SPACE">Onvoldoende vrije ruimte om het volume uit te breiden</entry>
+    <entry lang="nl" key="EXPANDER_WARNING_FILE_CONTAINER_JUNK">Waarschuwing: het containerbestand is groter dan het VeraCrypt-volumegebied. De gegevens na het VeraCrypt-volumegebied worden overschreven.\n\nWilt u doorgaan?</entry>
+    <entry lang="nl" key="EXPANDER_WARNING_FAT">Waarschuwing: het VeraCrypt-volume bevat een FAT-bestandssysteem!\n\nAlleen het VeraCrypt-volume zelf wordt uitgebreid, maar niet het bestandssysteem.\n\nWilt u doorgaan?</entry>
+    <entry lang="nl" key="EXPANDER_WARNING_EXFAT">Waarschuwing: het VeraCrypt-volume bevat een exFAT-bestandssysteem!\n\nAlleen het VeraCrypt-volume zelf wordt uitgebreid, maar niet het bestandssysteem.\n\nWilt u doorgaan?</entry>
+    <entry lang="nl" key="EXPANDER_WARNING_UNKNOWN_FS">Waarschuwing: het VeraCrypt-volume bevat een onbekend of geen bestandssysteem!\n\nAlleen het VeraCrypt-volume zelf wordt uitgebreid, het bestandssysteem blijft ongewijzigd.\n\nWilt u doorgaan?</entry>
+    <entry lang="nl" key="EXPANDER_ERROR_VOLUME_SIZE_TOO_SMALL">Nieuwe volumegrootte te klein. Ze moet minstens %I64u KiB groter zijn dan de huidige grootte.</entry>
+    <entry lang="nl" key="EXPANDER_ERROR_VOLUME_SIZE_TOO_LARGE">Nieuwe volumegrootte te groot. Onvoldoende ruimte op hoststation</entry>
+    <entry lang="nl" key="EXPANDER_ERROR_MAX_FILE_SIZE_EXCEEDED">Maximale bestandsgrootte van %I64u MB op hoststation overschreden.</entry>
+    <entry lang="nl" key="EXPANDER_ERROR_QUICKEXPAND_PRIVILEGES">Fout: de nodige rechten om 'snel uitbreiden' in te schakelen zijn niet verkregen!\nHaal het vinkje weg bij de optie 'snel uitbreiden' en probeer het opnieuw.</entry>
+    <entry lang="nl" key="EXPANDER_ERROR_MAX_VC_VOLUME_SIZE_EXCEEDED">Maximale VeraCrypt-volumegrootte van %I64u TB overschreden!\n</entry>
+    <entry lang="nl" key="FULL_FORMAT">Volledig formatteren</entry>
+    <entry lang="nl" key="FAST_CREATE">Snel aanmaken</entry>
+    <entry lang="nl" key="WARN_FAST_CREATE">WAARSCHUWING: gebruik snel aanmaken alleen in de volgende gevallen:\n\n1) Het apparaat bevat geen gevoelige gegevens en u hebt geen aannemelijke ontkenning nodig.\n2) Het apparaat is al op een veilige manier en volledig gecodeerd.\n\nWeet u zeker dat u snel aanmaken wilt gebruiken?</entry>
+    <entry lang="nl" key="IDC_ENABLE_EMV_SUPPORT">EMV-ondersteuning inschakelen</entry>
+    <entry lang="nl" key="COMMAND_APDU_INVALID">De naar de kaart gezonden APDU-opdracht is ongeldig.</entry>
+    <entry lang="nl" key="EXTENDED_APDU_UNSUPPORTED">Uitgebreide APDU-opdrachten kunnen niet worden gebruikt met het huidige token.</entry>
+    <entry lang="nl" key="SCARD_MODULE_INIT_FAILED">Fout tijdens het laden van de WinSCard/PCSC-bibliotheek.</entry>
+    <entry lang="nl" key="EMV_UNKNOWN_CARD_TYPE">De kaart in de lezer is geen ondersteunde EMV-kaart.</entry>
+    <entry lang="nl" key="EMV_SELECT_AID_FAILED">De AID van de kaart in de lezer kon niet worden geselecteerd.</entry>
+    <entry lang="nl" key="EMV_ICC_CERT_NOTFOUND">Het ICC Public Key Certificate is niet gevonden op de kaart.</entry>
+    <entry lang="nl" key="EMV_ISSUER_CERT_NOTFOUND">Het Public Key Certificate van de uitgever is niet gevonden op de kaart.</entry>
+    <entry lang="nl" key="EMV_CPLC_NOTFOUND">CLPC is niet gevonden op de EMV-kaart.</entry>
+    <entry lang="nl" key="EMV_PAN_NOTFOUND">Geen Primair AccountNummer (PAN) gevonden in de EMV-kaart.</entry>
+    <entry lang="nl" key="INVALID_EMV_PATH">EMV-pad is ongeldig.</entry>
+    <entry lang="nl" key="EMV_KEYFILE_DATA_NOTFOUND">Kan geen sleutelbestand maken van de gegevens van de EMV-kaart.\n\nEen van de volgende gegevens ontbreekt:\n- ICC Public Key Certificate.\n- Public Key Certificate van de uitgever.\n- CPCL-gegevens.</entry>
+    <entry lang="nl" key="SCARD_W_REMOVED_CARD">Geen kaart in de lezer.\n\nControleer of de kaart goed in de lezer zit.</entry>
+    <entry lang="nl" key="FORMAT_EXTERNAL_FAILED">Windows format.com opdracht kon het volume niet formatteren als NTFS/exFAT/ReFS: Fout 0x%.8X.\n\nTerugvallen op het gebruik van Windows FormatEx API.</entry>
+    <entry lang="nl" key="FORMATEX_API_FAILED">Windows FormatEx API kon het volume niet formatteren als NTFS/exFAT/ReFS.\n\nFoutstatus = %s.</entry>
+    <entry lang="nl" key="EXPANDER_WRITING_RANDOM_DATA">Willekeurige gegevens naar nieuwe ruimte schrijven...\n</entry>
+    <entry lang="nl" key="EXPANDER_WRITING_ENCRYPTED_BACKUP">Opnieuw versleutelde backup-header schrijven...\n</entry>
+    <entry lang="nl" key="EXPANDER_WRITING_ENCRYPTED_PRIMARY">Opnieuw versleutelde primaire header schrijven...\n</entry>
+    <entry lang="nl" key="EXPANDER_WIPING_OLD_HEADER">Oude backup-header wissen...\n</entry>
+    <entry lang="nl" key="EXPANDER_MOUNTING_VOLUME">Volume koppelen...\n</entry>
+    <entry lang="nl" key="EXPANDER_UNMOUNTING_VOLUME">Volume ontkoppelen...\n</entry>
+    <entry lang="nl" key="EXPANDER_EXTENDING_FILESYSTEM">Bestandssysteem uitbreiden...\n</entry>
+    <entry lang="nl" key="PARTIAL_SYSENC_MOUNT_READONLY">Waarschuwing: de systeempartitie die u probeerde te koppelen was niet volledig versleuteld. Als veiligheidsmaatregel om mogelijke beschadiging of ongewenste wijzigingen te voorkomen, is volume '%s' gekoppeld als alleen-lezen.</entry>
+    <entry lang="nl" key="IDC_LINK_KEYFILES_EXTENSIONS_WARNING">Belangrijke informatie over het gebruik van bestandsextensies van derden</entry>
+    <entry lang="en" key="IDC_DISABLE_MEMORY_PROTECTION">Disable memory protection for Accessibility tools compatibility</entry>
+    <entry lang="en" key="DISABLE_MEMORY_PROTECTION_WARNING">WARNING: Disabling memory protection significantly reduces security. Enable this option ONLY if you rely on Accessibility tools, like Screen Readers, to interact with VeraCrypt's UI.</entry>
+    <entry lang="nl" key="LINUX_LANGUAGE">Taal</entry>
+    <entry lang="en" key="LINUX_SELECT_SYS_DEFAULT_LANG">Select system's default language</entry>
+    <entry lang="en" key="LINUX_RESTART_FOR_LANGUAGE_CHANGE">For the language change to come into effect, VeraCrypt needs to be restarted.</entry>
   </localization>
   <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
     <xs:element name="VeraCrypt">

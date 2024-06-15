@@ -88,6 +88,7 @@ NTSTATUS TCOpenVolume (PDEVICE_OBJECT DeviceObject,
 	}
 
 	mount->VolumeMountedReadOnlyAfterDeviceWriteProtected = FALSE;
+	mount->VolumeMountedReadOnlyAfterPartialSysEnc = FALSE;
 
 	// If we are opening a device, query its size first
 	if (bRawDevice)
@@ -97,7 +98,7 @@ NTSTATUS TCOpenVolume (PDEVICE_OBJECT DeviceObject,
 		LARGE_INTEGER diskLengthInfo;
 		DISK_GEOMETRY_EX dg;
 		STORAGE_PROPERTY_QUERY storagePropertyQuery = {0};
-		byte* dgBuffer;
+		uint8* dgBuffer;
 		STORAGE_DEVICE_NUMBER storageDeviceNumber;
 
 		ntStatus = IoGetDeviceObjectPointer (&FullFileName,
@@ -610,7 +611,6 @@ NTSTATUS TCOpenVolume (PDEVICE_OBJECT DeviceObject,
 				&mount->ProtectedHidVolPassword,
 				mount->ProtectedHidVolPkcs5Prf,
 				mount->ProtectedHidVolPim,
-				mount->bTrueCryptMode,
 				&tmpCryptoInfo);
 		}
 		else
@@ -623,7 +623,6 @@ NTSTATUS TCOpenVolume (PDEVICE_OBJECT DeviceObject,
 				&mount->VolumePassword,
 				mount->pkcs5_prf,
 				mount->VolumePim,
-				mount->bTrueCryptMode,
 				&Extension->cryptoInfo);
 		}
 
@@ -679,10 +678,9 @@ NTSTATUS TCOpenVolume (PDEVICE_OBJECT DeviceObject,
 
 					if (Extension->cryptoInfo->EncryptedAreaLength.Value != Extension->cryptoInfo->VolumeSize.Value)
 					{
-						// Partial encryption is not supported for volumes mounted as regular
-						mount->nReturnCode = ERR_ENCRYPTION_NOT_COMPLETED;
-						ntStatus = STATUS_SUCCESS;
-						goto error;
+						// mount as readonly in case of partial system encryption
+						Extension->bReadOnly = mount->bMountReadOnly = TRUE;
+						mount->VolumeMountedReadOnlyAfterPartialSysEnc = TRUE;
 					}
 				}
 				else if (Extension->cryptoInfo->HeaderFlags & TC_HEADER_FLAG_NONSYS_INPLACE_ENC)
@@ -800,8 +798,7 @@ NTSTATUS TCOpenVolume (PDEVICE_OBJECT DeviceObject,
 				Extension->TracksPerCylinder = 1;
 				Extension->SectorsPerTrack = 1;
 				Extension->BytesPerSector = Extension->cryptoInfo->SectorSize;
-				// Add extra sector since our virtual partition starts at Extension->BytesPerSector and not 0
-				Extension->NumberOfCylinders = (Extension->DiskLength / Extension->BytesPerSector) + 1;
+				Extension->NumberOfCylinders = Extension->DiskLength / Extension->BytesPerSector;
 				Extension->PartitionType = 0;
 
 				Extension->bRawDevice = bRawDevice;

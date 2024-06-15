@@ -145,6 +145,7 @@ static BOOL RamEncryptionActivated = FALSE;
 static KeSaveExtendedProcessorStateFn KeSaveExtendedProcessorStatePtr = NULL;
 static KeRestoreExtendedProcessorStateFn KeRestoreExtendedProcessorStatePtr = NULL;
 static ExGetFirmwareEnvironmentVariableFn ExGetFirmwareEnvironmentVariablePtr = NULL;
+static KeQueryInterruptTimePreciseFn KeQueryInterruptTimePrecisePtr = NULL;
 static KeAreAllApcsDisabledFn KeAreAllApcsDisabledPtr = NULL;
 static KeSetSystemGroupAffinityThreadFn KeSetSystemGroupAffinityThreadPtr = NULL;
 static KeQueryActiveGroupCountFn KeQueryActiveGroupCountPtr = NULL;
@@ -215,7 +216,7 @@ BOOL IsUefiBoot ()
 void GetDriverRandomSeed (unsigned char* pbRandSeed, size_t cbRandSeed)
 {
 	LARGE_INTEGER iSeed, iSeed2;
-	byte digest[WHIRLPOOL_DIGESTSIZE];
+	uint8 digest[WHIRLPOOL_DIGESTSIZE];
 	WHIRLPOOL_CTX tctx;
 	size_t count;
 
@@ -238,8 +239,17 @@ void GetDriverRandomSeed (unsigned char* pbRandSeed, size_t cbRandSeed)
 		iSeed = KeQueryPerformanceCounter (&iSeed2);
 		WHIRLPOOL_add ((unsigned char *) &(iSeed.QuadPart), sizeof(iSeed.QuadPart), &tctx);
 		WHIRLPOOL_add ((unsigned char *) &(iSeed2.QuadPart), sizeof(iSeed2.QuadPart), &tctx);
-		iSeed.QuadPart = KeQueryInterruptTime ();
-		WHIRLPOOL_add ((unsigned char *) &(iSeed.QuadPart), sizeof(iSeed.QuadPart), &tctx);
+		if (KeQueryInterruptTimePrecisePtr)
+		{
+			iSeed.QuadPart = KeQueryInterruptTimePrecisePtr (&iSeed2.QuadPart);
+			WHIRLPOOL_add ((unsigned char *) &(iSeed.QuadPart), sizeof(iSeed.QuadPart), &tctx);
+			WHIRLPOOL_add ((unsigned char *) &(iSeed2.QuadPart), sizeof(iSeed2.QuadPart), &tctx);
+		}
+		else
+		{
+			iSeed.QuadPart = KeQueryInterruptTime ();
+			WHIRLPOOL_add ((unsigned char *) &(iSeed.QuadPart), sizeof(iSeed.QuadPart), &tctx);
+		}
 
 		/* use JitterEntropy library to get good quality random bytes based on CPU timing jitter */
 		if (0 == jent_entropy_init ())
@@ -337,6 +347,14 @@ NTSTATUS DriverEntry (PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
 		UNICODE_STRING funcName;
 		RtlInitUnicodeString(&funcName, L"ExGetFirmwareEnvironmentVariable");
 		ExGetFirmwareEnvironmentVariablePtr = (ExGetFirmwareEnvironmentVariableFn) MmGetSystemRoutineAddress(&funcName);
+	}
+
+	// KeQueryInterruptTimePrecise is available starting from Windows 8.1
+	if ((OsMajorVersion > 6) || (OsMajorVersion == 6 && OsMinorVersion >= 3))
+	{
+		UNICODE_STRING funcName;
+		RtlInitUnicodeString(&funcName, L"KeQueryInterruptTimePrecise");
+		KeQueryInterruptTimePrecisePtr = (KeQueryInterruptTimePreciseFn) MmGetSystemRoutineAddress(&funcName);
 	}
 
 	// Load dump filter if the main driver is already loaded
@@ -1015,8 +1033,8 @@ NTSTATUS ProcessVolumeDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION 
 				outputBuffer->Geometry.TracksPerCylinder = Extension->TracksPerCylinder;
 				outputBuffer->Geometry.SectorsPerTrack = Extension->SectorsPerTrack;
 				outputBuffer->Geometry.BytesPerSector = Extension->BytesPerSector;
-				/* add one sector to DiskLength since our partition size is DiskLength and its offset if BytesPerSector */
-				outputBuffer->DiskSize.QuadPart = Extension->DiskLength + Extension->BytesPerSector;
+				// Add 1MB to the disk size to emulate the geometry of a real MBR disk
+				outputBuffer->DiskSize.QuadPart = Extension->DiskLength + BYTES_PER_MB;
 
 				if (bFullBuffer)
 				{
@@ -1287,7 +1305,7 @@ NTSTATUS ProcessVolumeDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION 
 			outputBuffer->BootIndicator = FALSE;
 			outputBuffer->RecognizedPartition = TRUE;
 			outputBuffer->RewritePartition = FALSE;
-			outputBuffer->StartingOffset.QuadPart = Extension->BytesPerSector;
+			outputBuffer->StartingOffset.QuadPart = BYTES_PER_MB; // Set offset to 1MB to emulate the partition offset on a real MBR disk
 			outputBuffer->PartitionLength.QuadPart= Extension->DiskLength;
 			outputBuffer->PartitionNumber = 1;
 			outputBuffer->HiddenSectors = 0;
@@ -1304,7 +1322,7 @@ NTSTATUS ProcessVolumeDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION 
 
 			outputBuffer->PartitionStyle = PARTITION_STYLE_MBR;
 			outputBuffer->RewritePartition = FALSE;
-			outputBuffer->StartingOffset.QuadPart = Extension->BytesPerSector;
+			outputBuffer->StartingOffset.QuadPart = BYTES_PER_MB; // Set offset to 1MB to emulate the partition offset on a real MBR disk
 			outputBuffer->PartitionLength.QuadPart= Extension->DiskLength;
 			outputBuffer->PartitionNumber = 1;
 			outputBuffer->Mbr.PartitionType = Extension->PartitionType;
@@ -1332,7 +1350,7 @@ NTSTATUS ProcessVolumeDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION 
 			outputBuffer->PartitionEntry->BootIndicator = FALSE;
 			outputBuffer->PartitionEntry->RecognizedPartition = TRUE;
 			outputBuffer->PartitionEntry->RewritePartition = FALSE;
-			outputBuffer->PartitionEntry->StartingOffset.QuadPart = Extension->BytesPerSector;
+			outputBuffer->PartitionEntry->StartingOffset.QuadPart = BYTES_PER_MB; // Set offset to 1MB to emulate the partition offset on a real MBR disk
 			outputBuffer->PartitionEntry->PartitionLength.QuadPart = Extension->DiskLength;
 			outputBuffer->PartitionEntry->PartitionNumber = 1;
 			outputBuffer->PartitionEntry->HiddenSectors = 0;			
@@ -1368,7 +1386,7 @@ NTSTATUS ProcessVolumeDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION 
 				outputBuffer->PartitionEntry->Mbr.BootIndicator = FALSE;
 				outputBuffer->PartitionEntry->Mbr.RecognizedPartition = TRUE;
 				outputBuffer->PartitionEntry->RewritePartition = FALSE;
-				outputBuffer->PartitionEntry->StartingOffset.QuadPart = Extension->BytesPerSector;
+				outputBuffer->PartitionEntry->StartingOffset.QuadPart = BYTES_PER_MB; // Set offset to 1MB to emulate the partition offset on a real MBR disk
 				outputBuffer->PartitionEntry->PartitionLength.QuadPart = Extension->DiskLength;
 				outputBuffer->PartitionEntry->PartitionNumber = 1;
 				outputBuffer->PartitionEntry->Mbr.HiddenSectors = 0;
@@ -1529,7 +1547,7 @@ NTSTATUS ProcessVolumeDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION 
 				// of the underlaying physical disk and we report a single extent 
 				extents->NumberOfDiskExtents = 1;
 				extents->Extents[0].DiskNumber = Extension->DeviceNumber;
-				extents->Extents[0].StartingOffset.QuadPart = Extension->BytesPerSector;
+				extents->Extents[0].StartingOffset.QuadPart = BYTES_PER_MB; // Set offset to 1MB to emulate the partition offset on a real MBR disk
 				extents->Extents[0].ExtentLength.QuadPart = Extension->DiskLength;
 			}
 			else
@@ -1557,8 +1575,8 @@ NTSTATUS ProcessVolumeDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION 
 				capacity->Version = sizeof (STORAGE_READ_CAPACITY);
 				capacity->Size = sizeof (STORAGE_READ_CAPACITY);
 				capacity->BlockLength = Extension->BytesPerSector;
-				capacity->NumberOfBlocks.QuadPart = (Extension->DiskLength / Extension->BytesPerSector) + 1;
-				capacity->DiskLength.QuadPart = Extension->DiskLength + Extension->BytesPerSector;
+				capacity->DiskLength.QuadPart = Extension->DiskLength + BYTES_PER_MB; // Add 1MB to the disk size to emulate the geometry of a real MBR disk
+				capacity->NumberOfBlocks.QuadPart = capacity->DiskLength.QuadPart / capacity->BlockLength;
 
 				Irp->IoStatus.Status = STATUS_SUCCESS;
 				Irp->IoStatus.Information = sizeof (STORAGE_READ_CAPACITY);
@@ -1941,7 +1959,7 @@ NTSTATUS ProcessMainDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION Ex
 	switch (irpSp->Parameters.DeviceIoControl.IoControlCode)
 	{
 	case TC_IOCTL_GET_DRIVER_VERSION:
-	case TC_IOCTL_LEGACY_GET_DRIVER_VERSION:
+
 		if (ValidateIOBufferSize (Irp, sizeof (LONG), ValidateOutput))
 		{
 			LONG tmp = VERSION_NUM;
@@ -2052,7 +2070,7 @@ NTSTATUS ProcessMainDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION Ex
 
 				if (opentest->bDetectTCBootLoader || opentest->DetectFilesystem || opentest->bComputeVolumeIDs)
 				{
-					byte *readBuffer = TCalloc (TC_MAX_VOLUME_SECTOR_SIZE);
+					uint8 *readBuffer = TCalloc (TC_MAX_VOLUME_SECTOR_SIZE);
 					if (!readBuffer)
 					{
 						ntStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -2215,7 +2233,7 @@ NTSTATUS ProcessMainDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION Ex
 
 			if (NT_SUCCESS (ntStatus))
 			{
-				byte *readBuffer = TCalloc (TC_MAX_VOLUME_SECTOR_SIZE);
+				uint8 *readBuffer = TCalloc (TC_MAX_VOLUME_SECTOR_SIZE);
 				if (!readBuffer)
 				{
 					Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2375,27 +2393,11 @@ NTSTATUS ProcessMainDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION Ex
 						list->volumeType[ListExtension->nDosDriveNo] = PROP_VOL_TYPE_OUTER;	// Normal/outer volume (hidden volume protected)
 					else
 						list->volumeType[ListExtension->nDosDriveNo] = PROP_VOL_TYPE_NORMAL;	// Normal volume
-					list->truecryptMode[ListExtension->nDosDriveNo] = ListExtension->cryptoInfo->bTrueCryptMode;
 				}
 			}
 
 			Irp->IoStatus.Status = STATUS_SUCCESS;
 			Irp->IoStatus.Information = sizeof (MOUNT_LIST_STRUCT);
-		}
-		break;
-
-	case TC_IOCTL_LEGACY_GET_MOUNTED_VOLUMES:
-		if (ValidateIOBufferSize (Irp, sizeof (uint32), ValidateOutput))
-		{
-			// Prevent the user from downgrading to versions lower than 5.0 by faking mounted volumes.
-			// The user could render the system unbootable by downgrading when boot encryption
-			// is active or being set up.
-
-			memset (Irp->AssociatedIrp.SystemBuffer, 0, irpSp->Parameters.DeviceIoControl.OutputBufferLength);
-			*(uint32 *) Irp->AssociatedIrp.SystemBuffer = 0xffffFFFF;
-
-			Irp->IoStatus.Status = STATUS_SUCCESS;
-			Irp->IoStatus.Information = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 		}
 		break;
 
@@ -2674,7 +2676,6 @@ NTSTATUS ProcessMainDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION Ex
 				||	mount->pkcs5_prf < 0 || mount->pkcs5_prf > LAST_PRF_ID
 				||	mount->VolumePim < -1 || mount->VolumePim == INT_MAX
 				|| mount->ProtectedHidVolPkcs5Prf < 0 || mount->ProtectedHidVolPkcs5Prf > LAST_PRF_ID
-				|| (mount->bTrueCryptMode != FALSE && mount->bTrueCryptMode != TRUE)
 				)
 			{
 				Irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
@@ -2692,7 +2693,6 @@ NTSTATUS ProcessMainDeviceControlIrp (PDEVICE_OBJECT DeviceObject, PEXTENSION Ex
 			burn (&mount->ProtectedHidVolPassword, sizeof (mount->ProtectedHidVolPassword));
 			burn (&mount->pkcs5_prf, sizeof (mount->pkcs5_prf));
 			burn (&mount->VolumePim, sizeof (mount->VolumePim));
-			burn (&mount->bTrueCryptMode, sizeof (mount->bTrueCryptMode));
 			burn (&mount->ProtectedHidVolPkcs5Prf, sizeof (mount->ProtectedHidVolPkcs5Prf));
 			burn (&mount->ProtectedHidVolPim, sizeof (mount->ProtectedHidVolPim));
 		}
@@ -3174,6 +3174,21 @@ VOID VolumeThreadProc (PVOID Context)
 	Extension->Queue.HostFileHandle = Extension->hDeviceFile;
 	Extension->Queue.VirtualDeviceLength = Extension->DiskLength;
 	Extension->Queue.MaxReadAheadOffset.QuadPart = Extension->HostLength;
+	if (bDevice && pThreadBlock->mount->bPartitionInInactiveSysEncScope
+		&& (!Extension->cryptoInfo->hiddenVolume)
+		&& (Extension->cryptoInfo->EncryptedAreaLength.Value != Extension->cryptoInfo->VolumeSize.Value)
+		)
+	{
+		// Support partial encryption only in the case of system encryption
+		Extension->Queue.EncryptedAreaStart = 0;
+		Extension->Queue.EncryptedAreaEnd = Extension->cryptoInfo->EncryptedAreaLength.Value - 1;
+		if (Extension->Queue.CryptoInfo->EncryptedAreaLength.Value == 0)
+		{
+			Extension->Queue.EncryptedAreaStart = -1;
+			Extension->Queue.EncryptedAreaEnd = -1;
+		}
+		Extension->Queue.bSupportPartialEncryption = TRUE;
+	}
 
 	if (Extension->SecurityClientContextValid)
 		Extension->Queue.SecurityClientContext = &Extension->SecurityClientContext;
@@ -3702,7 +3717,7 @@ NTSTATUS ProbeRealDriveSize (PDEVICE_OBJECT driveDeviceObject, LARGE_INTEGER *dr
 	NTSTATUS status;
 	LARGE_INTEGER sysLength;
 	LARGE_INTEGER offset;
-	byte *sectorBuffer;
+	uint8 *sectorBuffer;
 	ULONGLONG startTime;
 	ULONG sectorSize;
 
@@ -4904,7 +4919,7 @@ NTSTATUS ZeroUnreadableSectors (PDEVICE_OBJECT deviceObject, LARGE_INTEGER start
 	NTSTATUS status;
 	ULONG sectorSize;
 	ULONG sectorCount;
-	byte *sectorBuffer = NULL;
+	uint8 *sectorBuffer = NULL;
 
 	*zeroedSectorCount = 0;
 
@@ -4942,7 +4957,7 @@ err:
 }
 
 
-NTSTATUS ReadDeviceSkipUnreadableSectors (PDEVICE_OBJECT deviceObject, byte *buffer, LARGE_INTEGER startOffset, ULONG size, uint64 *badSectorCount)
+NTSTATUS ReadDeviceSkipUnreadableSectors (PDEVICE_OBJECT deviceObject, uint8 *buffer, LARGE_INTEGER startOffset, ULONG size, uint64 *badSectorCount)
 {
 	NTSTATUS status;
 	ULONG sectorSize;

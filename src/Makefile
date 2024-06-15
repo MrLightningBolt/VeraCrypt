@@ -24,6 +24,7 @@
 # SSE41:		Enable SSE4.1 support in compiler
 # NOSSE2:		Disable SEE2 support in compiler
 # WITHGTK3:		Build wxWidgets against GTK3
+# WOLFCRYPT:		Build with wolfCrypt as crypto provider (see Crypto/wolfCrypt.md)
 
 #------ Targets ------
 # all
@@ -49,6 +50,7 @@ C_CXX_FLAGS := -MMD -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -I
 export ASFLAGS := -D __GNUC__ -D __YASM__
 export LFLAGS :=
 
+export PKG_CONFIG ?= pkg-config
 export PKG_CONFIG_PATH ?= /usr/local/lib/pkgconfig
 
 export WX_CONFIG ?= wx-config
@@ -101,8 +103,8 @@ ifeq "$(origin INDICATOR)" "command line"
 	else
 		INDICATOR_LIBRARY=ayatana-appindicator-0.1
 	endif
-	export LIBS += $(shell pkg-config --libs $(INDICATOR_LIBRARY))
-	C_CXX_FLAGS += $(shell pkg-config --cflags $(INDICATOR_LIBRARY)) -DHAVE_INDICATORS
+	export AYATANA_LIBS += $(shell $(PKG_CONFIG) --libs $(INDICATOR_LIBRARY))
+	C_CXX_FLAGS += $(shell $(PKG_CONFIG) --cflags $(INDICATOR_LIBRARY)) -DHAVE_INDICATORS
 endif
 
 #------ Release configuration ------
@@ -144,6 +146,7 @@ export PLATFORM_UNSUPPORTED := 0
 export CPU_ARCH ?= unknown
 export SIMD_SUPPORTED := 0
 export DISABLE_AESNI ?= 0
+export ENABLE_WOLFCRYPT ?= 0
 
 export GCC_GTEQ_440 := 0
 export GCC_GTEQ_430 := 0
@@ -184,20 +187,38 @@ ifeq "$(origin NOAESNI)" "command line"
 	DISABLE_AESNI := 1
 endif
 
+ifeq "$(origin WOLFCRYPT)" "command line"
+	ENABLE_WOLFCRYPT := 1
+	C_CXX_FLAGS += -DWOLFCRYPT_BACKEND
+	export LIBS += -lwolfssl
+	export LD_LIBRARY_PATH=/usr/local/lib
+endif
+
 #------ Linux configuration ------
 
 ifeq "$(shell uname -s)" "Linux"
 
 	PLATFORM := Linux
 	C_CXX_FLAGS += -DTC_UNIX -DTC_LINUX
+	
+	# PCSC
+	C_CXX_FLAGS += $(shell pkg-config --cflags libpcsclite)
 
-	# GNU GCC version 11 and higher compile with -std=gnu++17 by default
-        # which breaks "byte" definitions in Crypto++ library. So set 
-        # -std=gnu++14 instead.
-        GCC11PLUS := $(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 11)
-        ifeq "$(GCC11PLUS)" "1"
-                CXXFLAGS += -std=gnu++14
-        endif
+	# Extract the major and minor version numbers of GCC in a combined format for easy comparison
+	GCC_VERSION := $(shell $(CC) -dumpversion | awk -F. '{printf "%d%02d", $$1, $$2}')
+
+	# Set the C++ standard based on the version numbers
+	ifeq ($(shell expr $(GCC_VERSION) \< 408), 1)
+		# GCC version below 4.8 support minimal C++11 features through the switch -std=c++0x
+		CXXFLAGS += -std=c++0x
+	else ifeq ($(GCC_VERSION), 408)
+		# GCC version 4.8 supports C++11 features through the switch -std=c++11
+		CXXFLAGS += -std=c++11
+	else ifeq ($(shell expr $(GCC_VERSION) \>= 1100), 1)
+		# GNU GCC version 11 and higher compile with -std=gnu++17 by default
+		# which breaks "byte" definitions in Crypto++ library. So set -std=gnu++14 instead.
+		CXXFLAGS += -std=gnu++14
+	endif
 
 	
 	ifeq "$(SIMD_SUPPORTED)" "1"
@@ -261,6 +282,8 @@ ifeq "$(shell uname -s)" "Linux"
 	
 	ifeq "$(origin WITHGTK3)" "command line"
 		WX_CONFIGURE_FLAGS += --with-gtk=3
+	else
+		WX_CONFIGURE_FLAGS += --with-gtk=2
 	endif
 
 endif
@@ -288,6 +311,8 @@ ifeq "$(shell uname -s)" "Darwin"
 
 	CC := gcc
 	CXX := g++
+
+	GCC_GTEQ_430 := 1
 
 	C_CXX_FLAGS += -DTC_UNIX -DTC_BSD -DTC_MACOSX -mmacosx-version-min=$(VC_OSX_TARGET) -isysroot $(VC_OSX_SDK_PATH)
 	LFLAGS += -mmacosx-version-min=$(VC_OSX_TARGET) -Wl,-syslibroot $(VC_OSX_SDK_PATH)
@@ -361,9 +386,14 @@ ifeq "$(shell uname -s)" "FreeBSD"
 	PLATFORM := FreeBSD
 	PLATFORM_UNSUPPORTED := 1
 	C_CXX_FLAGS += -DTC_UNIX -DTC_BSD -DTC_FREEBSD
+
+	# PCSC
+	C_CXX_FLAGS += $(shell pkg-config --cflags libpcsclite)
 	
 	CC := cc
 	CXX := c++
+
+	GCC_GTEQ_430 := 1
 	
 	ifeq "$(TC_BUILD_CONFIG)" "Release"
 		C_CXX_FLAGS += -fdata-sections -ffunction-sections -fpie
@@ -418,8 +448,13 @@ ifeq "$(shell uname -s)" "OpenBSD"
 	PLATFORM_UNSUPPORTED := 1
 	C_CXX_FLAGS += -DTC_UNIX -DTC_BSD -DTC_OPENBSD
 
+	# PCSC
+	C_CXX_FLAGS += $(shell pkg-config --cflags libpcsclite)
+
 	CC := cc
 	CXX := c++
+
+	GCC_GTEQ_430 := 1
 
 	ifeq "$(TC_BUILD_CONFIG)" "Release"
 		C_CXX_FLAGS += -fdata-sections -ffunction-sections -fpie
@@ -440,6 +475,9 @@ ifeq "$(shell uname -s)" "SunOS"
 	C_CXX_FLAGS += -DTC_UNIX -DTC_SOLARIS
 	WX_CONFIGURE_FLAGS += --with-gtk
 
+	# PCSC
+	C_CXX_FLAGS += $(shell pkg-config --cflags libpcsclite)
+
 endif
 
 
@@ -452,8 +490,8 @@ LFLAGS := $(LFLAGS) $(TC_EXTRA_LFLAGS)
 WX_CONFIGURE_FLAGS += --enable-unicode -disable-shared --disable-dependency-tracking --enable-exceptions --enable-std_string --enable-dataobj --enable-mimetype
 
 ifdef VC_WX_MINIMAL
-WX_CONFIGURE_FLAGS += --disable-protocol --disable-protocols --disable-url --disable-ipc --disable-sockets --disable-fs_inet --disable-ole --disable-docview --disable-clipboard \
-	--disable-help --disable-html --disable-mshtmlhelp --disable-htmlhelp --disable-mdi --disable-metafile --disable-webkit --disable-webview \
+WX_CONFIGURE_FLAGS += --disable-protocol --disable-protocols --disable-url --disable-ipc --disable-sockets --without-libcurl --disable-fs_inet --disable-ole --disable-docview --disable-clipboard \
+	--disable-help --disable-html --disable-mshtmlhelp --disable-htmlhelp --disable-mdi --disable-metafile --disable-addremovectrl --disable-webview \
 	--disable-xrc --disable-aui --disable-postscript --disable-printarch \
 	--disable-arcstream --disable-fs_archive --disable-fs_zip --disable-tarstream --disable-zipstream \
 	--disable-animatectrl --disable-bmpcombobox --disable-calendar --disable-caret --disable-checklst --disable-collpane --disable-colourpicker --disable-comboctrl \
@@ -469,7 +507,7 @@ WX_CONFIGURE_FLAGS += --disable-protocol --disable-protocols --disable-url --dis
 	--disable-gif --disable-pcx --disable-tga --disable-iff --disable-gif --disable-pnm --disable-svg \
 	--without-expat --without-libtiff --without-libjpeg --without-libpng -without-regex --without-zlib
 	
-ifeq "$(PLATFORM)" "Linux"
+ifneq (,$(filter Linux FreeBSD,$(PLATFORM)))
 WX_CONFIGURE_FLAGS += --disable-tooltips
 ifneq "$(origin WITHGTK3)" "command line"
 	WX_CONFIGURE_FLAGS += --disable-graphics_ctx

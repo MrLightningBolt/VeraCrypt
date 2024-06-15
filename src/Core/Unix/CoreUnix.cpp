@@ -78,10 +78,8 @@ namespace VeraCrypt
 			if (stat("/usr/bin/konsole", &sb) == 0)
 			{
 				args.clear ();
-				args.push_back ("--title");
-				args.push_back ("fsck");
-				args.push_back ("--caption");
-				args.push_back ("fsck");
+				args.push_back ("-p");
+				args.push_back ("tabtitle=fsck");
 				args.push_back ("-e");
 				args.push_back ("sh");
 				args.push_back ("-c");
@@ -91,8 +89,22 @@ namespace VeraCrypt
 					Process::Execute ("konsole", args, 1000);
 				} catch (TimeOut&) { }
 			}
+			else if (stat("/usr/bin/gnome-terminal", &sb) == 0 && stat("/usr/bin/dbus-launch", &sb) == 0)
+			{
+				args.clear ();
+				args.push_back ("--title");
+				args.push_back ("fsck");
+				args.push_back ("--");
+				args.push_back ("sh");
+				args.push_back ("-c");
+				args.push_back (xargs);
+				try
+				{
+					Process::Execute ("gnome-terminal", args, 1000);
+				} catch (TimeOut&) { }
+			}
 			else
-				throw;
+				throw TerminalNotFound();
 		}
 #endif
 	}
@@ -229,7 +241,7 @@ namespace VeraCrypt
 		device.SeekAt (0);
 		device.ReadCompleteBuffer (bootSector);
 
-		byte *b = bootSector.Ptr();
+		uint8 *b = bootSector.Ptr();
 
 		return memcmp (b + 3,  "NTFS", 4) != 0
 			&& memcmp (b + 54, "FAT", 3) != 0
@@ -534,8 +546,8 @@ namespace VeraCrypt
 					options.Password,
 					options.Pim,
 					options.Kdf,
-					options.TrueCryptMode,
 					options.Keyfiles,
+					options.EMVSupportEnabled,
 					options.Protection,
 					options.ProtectionPassword,
 					options.ProtectionPim,
@@ -679,7 +691,7 @@ namespace VeraCrypt
 				{
 					try
 					{
-						chown (mountPoint.c_str(), GetRealUserId(), GetRealGroupId());
+						throw_sys_sub_if (chown (mountPoint.c_str(), GetRealUserId(), GetRealGroupId()) == -1, mountPoint);
 					} catch (...) { }
 				}
 			}

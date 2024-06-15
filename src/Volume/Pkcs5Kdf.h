@@ -29,20 +29,17 @@ namespace VeraCrypt
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, int pim, const ConstBufferPtr &salt) const;
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const = 0;
-		static shared_ptr <Pkcs5Kdf> GetAlgorithm (const wstring &name, bool truecryptMode);
-		static shared_ptr <Pkcs5Kdf> GetAlgorithm (const Hash &hash, bool truecryptMode);
-		static Pkcs5KdfList GetAvailableAlgorithms (bool truecryptMode);
+		static shared_ptr <Pkcs5Kdf> GetAlgorithm (const wstring &name);
+		static shared_ptr <Pkcs5Kdf> GetAlgorithm (const Hash &hash);
+		static Pkcs5KdfList GetAvailableAlgorithms ();
 		virtual shared_ptr <Hash> GetHash () const = 0;
 		virtual int GetIterationCount (int pim) const = 0;
 		virtual wstring GetName () const = 0;
 		virtual Pkcs5Kdf* Clone () const = 0;
 		virtual bool IsDeprecated () const { return GetHash()->IsDeprecated(); }
-		bool GetTrueCryptMode () const { return m_truecryptMode;}
-		void SetTrueCryptMode (bool truecryptMode) { m_truecryptMode = truecryptMode;}
 
 	protected:
-		bool m_truecryptMode;
-		Pkcs5Kdf (bool truecryptMode);
+		Pkcs5Kdf ();
 
 		void ValidateParameters (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
 
@@ -51,10 +48,11 @@ namespace VeraCrypt
 		Pkcs5Kdf &operator= (const Pkcs5Kdf &);
 	};
 
+    #ifndef WOLFCRYPT_BACKEND
 	class Pkcs5HmacBlake2s_Boot : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacBlake2s_Boot () : Pkcs5Kdf(false) { }
+		Pkcs5HmacBlake2s_Boot () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacBlake2s_Boot () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
@@ -71,7 +69,7 @@ namespace VeraCrypt
 	class Pkcs5HmacBlake2s : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacBlake2s () : Pkcs5Kdf(false) { }
+		Pkcs5HmacBlake2s () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacBlake2s () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
@@ -84,11 +82,12 @@ namespace VeraCrypt
 		Pkcs5HmacBlake2s (const Pkcs5HmacBlake2s &);
 		Pkcs5HmacBlake2s &operator= (const Pkcs5HmacBlake2s &);
 	};
+    #endif
 
 	class Pkcs5HmacSha256_Boot : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacSha256_Boot () : Pkcs5Kdf(false) { }
+		Pkcs5HmacSha256_Boot () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacSha256_Boot () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
@@ -105,7 +104,7 @@ namespace VeraCrypt
 	class Pkcs5HmacSha256 : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacSha256 () : Pkcs5Kdf(false) { }
+		Pkcs5HmacSha256 () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacSha256 () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
@@ -122,31 +121,31 @@ namespace VeraCrypt
 	class Pkcs5HmacSha512 : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacSha512 (bool truecryptMode) : Pkcs5Kdf(truecryptMode) { }
+		Pkcs5HmacSha512 () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacSha512 () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
 		virtual shared_ptr <Hash> GetHash () const { return shared_ptr <Hash> (new Sha512); }
-		virtual int GetIterationCount (int pim) const { return m_truecryptMode? 1000 : (pim <= 0 ? 500000 : (15000 + (pim * 1000))); }
+		virtual int GetIterationCount (int pim) const { return (pim <= 0 ? 500000 : (15000 + (pim * 1000))); }
 		virtual wstring GetName () const { return L"HMAC-SHA-512"; }
-		virtual Pkcs5Kdf* Clone () const { return new Pkcs5HmacSha512(m_truecryptMode); }
+		virtual Pkcs5Kdf* Clone () const { return new Pkcs5HmacSha512(); }
 
 	private:
 		Pkcs5HmacSha512 (const Pkcs5HmacSha512 &);
 		Pkcs5HmacSha512 &operator= (const Pkcs5HmacSha512 &);
 	};
-
+    #ifndef WOLFCRYPT_BACKEND
 	class Pkcs5HmacWhirlpool : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacWhirlpool (bool truecryptMode) : Pkcs5Kdf(truecryptMode) { }
+		Pkcs5HmacWhirlpool () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacWhirlpool () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
 		virtual shared_ptr <Hash> GetHash () const { return shared_ptr <Hash> (new Whirlpool); }
-		virtual int GetIterationCount (int pim) const { return m_truecryptMode? 1000 : (pim <= 0 ? 500000 : (15000 + (pim * 1000))); }
+		virtual int GetIterationCount (int pim) const { return (pim <= 0 ? 500000 : (15000 + (pim * 1000))); }
 		virtual wstring GetName () const { return L"HMAC-Whirlpool"; }
-		virtual Pkcs5Kdf* Clone () const { return new Pkcs5HmacWhirlpool(m_truecryptMode); }
+		virtual Pkcs5Kdf* Clone () const { return new Pkcs5HmacWhirlpool(); }
 
 	private:
 		Pkcs5HmacWhirlpool (const Pkcs5HmacWhirlpool &);
@@ -156,7 +155,7 @@ namespace VeraCrypt
 	class Pkcs5HmacStreebog : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacStreebog () : Pkcs5Kdf(false) { }
+		Pkcs5HmacStreebog () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacStreebog () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
@@ -173,7 +172,7 @@ namespace VeraCrypt
 	class Pkcs5HmacStreebog_Boot : public Pkcs5Kdf
 	{
 	public:
-		Pkcs5HmacStreebog_Boot () : Pkcs5Kdf(false) { }
+		Pkcs5HmacStreebog_Boot () : Pkcs5Kdf() { }
 		virtual ~Pkcs5HmacStreebog_Boot () { }
 
 		virtual void DeriveKey (const BufferPtr &key, const VolumePassword &password, const ConstBufferPtr &salt, int iterationCount) const;
@@ -186,6 +185,7 @@ namespace VeraCrypt
 		Pkcs5HmacStreebog_Boot (const Pkcs5HmacStreebog_Boot &);
 		Pkcs5HmacStreebog_Boot &operator= (const Pkcs5HmacStreebog_Boot &);
 	};
+    #endif
 }
 
 #endif // TC_HEADER_Encryption_Pkcs5
